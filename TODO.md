@@ -1,52 +1,52 @@
-# TODO — план переводов
+# TODO — translation plan
 
-Пилот: **Kraken2** (самая короткая статья, на ней обкатываем конвейер).
+Pilot: **Kraken2** (shortest paper — use it to shake down the pipeline).
 
-Порядок чтения из методички: NCBI Taxonomy (10 мин, не статья) → Kraken2 → MetaPhlAn4 → PLOS-сравнение → Taxometer → Perseus → YACHT (самая математичная).
+Reading order from the project brief: NCBI Taxonomy (10 min, not a paper) → Kraken2 → MetaPhlAn4 → PLOS comparison → Taxometer → Perseus → YACHT (most math-heavy).
 
-## Конвейер каждой статьи
+## Per-paper pipeline
 
-1. Вытащить текст из PMC (не PDF — чистый текст без OCR-ошибок).
-2. MT-перевод (субагент, глоссарий из `glossary/` обязателен).
-3. Скриптовая проверка: количество заголовков/ссылок/DOI/чисел = оригиналу.
-4. Ревью второй моделью по рубрике MQM → внести правки → перепроверить скриптом.
-5. Заполнить `meta.yml` + шапку перевода, обновить таблицы в README.md / README.ru.md.
-6. (опционально) Zenodo DOI, добавить в meta.yml.
+1. Extract text from PMC (not PDF — clean text, no OCR errors).
+2. MT translation (subagent; glossary from `glossary/` is mandatory).
+3. Scripted verification: heading/link/DOI/number counts must match the original.
+4. Review by a second model against the MQM rubric → apply fixes → re-run scripted check.
+5. Fill `meta.yml` + translation header; update tables in README.md / README.ru.md.
+6. (optional) Zenodo DOI, add to meta.yml.
 
-## Статьи
+## Papers
 
-- [ ] **P0 — Kraken2** (пилот)
+- [ ] **P0 — Kraken2** (pilot)
   - Wood D.E., Lu J., Langmead B. "Improved metagenomic analysis with Kraken 2". Genome Biology 20:257 (2019)
   - DOI: https://doi.org/10.1186/s13059-019-1891-0
-  - Текст: https://pmc.ncbi.nlm.nih.gov/articles/PMC6883579/ (Springer-страница пустая — брать PMC)
-  - Лицензия: CC BY 4.0 · папка: `papers/2019-kraken2/` · ~2500 слов, легко-средне
+  - Text: https://pmc.ncbi.nlm.nih.gov/articles/PMC6883579/ (Springer page renders empty — use PMC)
+  - License: CC BY 4.0 · folder: `papers/2019-kraken2/` · ~2500 words, easy-medium
 - [ ] **P1 — MetaPhlAn4**
   - Blanco-Míguez A. et al. "Extending and improving metagenomic taxonomic profiling with uncharacterized species using MetaPhlAn 4". Nature Biotechnology (2023)
   - DOI: https://doi.org/10.1038/s41587-023-01688-w
-  - Текст: https://pmc.ncbi.nlm.nih.gov/articles/PMC10635831/
-  - Лицензия: CC BY 4.0 · папка: `papers/2023-metaphlan4/` · средне-жёстко, 40–60 мин
-- [ ] **P1 — Сравнение Kraken2 vs MetaPhlAn4**
+  - Text: https://pmc.ncbi.nlm.nih.gov/articles/PMC10635831/
+  - License: CC BY 4.0 · folder: `papers/2023-metaphlan4/` · medium-hard, 40–60 min
+- [ ] **P1 — Kraken2 vs MetaPhlAn4 comparison**
   - Karagiannis, Chen et al. "Integrative analysis across metagenomic taxonomic classifiers… (Integrative Longevity Omics Study)". PLOS Computational Biology (2026)
   - DOI: https://doi.org/10.1371/journal.pcbi.1013883
-  - Текст: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013883
-  - Лицензия: CC BY 4.0 · папка: `papers/2026-k2-vs-mpa4/` · средне, 40–50 мин
+  - Text: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013883
+  - License: CC BY 4.0 · folder: `papers/2026-k2-vs-mpa4/` · medium, 40–50 min
 - [ ] **P2 — Taxometer**
   - Kutuzova S. et al. "Taxometer: Improving taxonomic classification of metagenomics contigs". Nature Communications 15:8357 (2024)
   - DOI: https://doi.org/10.1038/s41467-024-52771-y
-  - Текст: https://pmc.ncbi.nlm.nih.gov/articles/PMC11437175/
-  - Лицензия: CC BY 4.0 · папка: `papers/2024-taxometer/` · средне, 45–60 мин · ближайшая работа к проекту
+  - Text: https://pmc.ncbi.nlm.nih.gov/articles/PMC11437175/
+  - License: CC BY 4.0 · folder: `papers/2024-taxometer/` · medium, 45–60 min · closest work to the project
 - [ ] **P2 — Perseus**
   - Nguyen, Schatz. "Perseus: Lineage-Aware Refinement of Kraken2 Taxonomic Classification for Long Read Metagenomes" (2026)
-  - Текст: https://pmc.ncbi.nlm.nih.gov/articles/PMC13001417/ (препринт; проверить, не вышла ли рецензируемая версия в Bioinformatics — при цитировании брать её)
-  - Лицензия: **CC BY-NC 4.0** (некоммерческая!) · папка: `papers/2026-perseus/` · средне-жёстко, 45–60 мин · ключевая для проекта
-- [ ] **P3 — YACHT** (самая математичная — оставить напоследок)
+  - Text: https://pmc.ncbi.nlm.nih.gov/articles/PMC13001417/ (preprint; check whether the peer-reviewed Bioinformatics version is out — cite that one when available)
+  - License: **CC BY-NC 4.0** (non-commercial!) · folder: `papers/2026-perseus/` · medium-hard, 45–60 min · key paper for the project
+- [ ] **P3 — YACHT** (most math-heavy — do last)
   - Koslicki D. et al. "YACHT: an ANI-based statistical test to detect microbial presence/absence in a metagenomic sample". Bioinformatics 40(2) (2024)
   - DOI: https://doi.org/10.1093/bioinformatics/btae047
-  - Текст: https://pmc.ncbi.nlm.nih.gov/articles/PMC10868342/ (OUP напрямую отдаёт 403)
-  - Лицензия: CC BY (проверить блок License перед публикацией) · папка: `papers/2024-yacht/` · жёстко, 1.5–2 ч
+  - Text: https://pmc.ncbi.nlm.nih.gov/articles/PMC10868342/ (OUP serves 403 directly)
+  - License: CC BY (check the License block before publishing) · folder: `papers/2024-yacht/` · hard, 1.5–2 h
 
-## Инфраструктура (после пилота)
+## Infrastructure (after the pilot)
 
-- [ ] Quarto-сайт: `_quarto.yml`, `index.qmd` (listing по `papers/`), Action `.github/workflows/publish.yml` → gh-pages
-- [ ] Zenodo-DOI для готовых переводов
-- [ ] Хабр-пост по лучшей статье (Taxometer или Perseus)
+- [ ] Quarto site: `_quarto.yml`, `index.qmd` (listing over `papers/`), Action `.github/workflows/publish.yml` → gh-pages
+- [ ] Zenodo DOIs for finished translations
+- [ ] Habr post on the best paper (Taxometer or Perseus)
