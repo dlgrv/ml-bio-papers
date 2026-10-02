@@ -2,7 +2,7 @@
 
 # ml-bio-papers
 
-Unofficial Russian translations and structured summaries of scientific papers on machine learning in biology — metagenomics, proteins, molecules.
+Unofficial translations and structured summaries of scientific papers on machine learning in biology — metagenomics, proteins, molecules.
 
 Every translation states its original source (DOI), the license it is made under, and its review status: machine translation, machine translation + LLM review, or human-verified.
 
@@ -52,7 +52,7 @@ ml-bio-papers/
 ├── README.md               # this file
 ├── README.ru.md            # Russian version
 ├── TRANSLATION.md          # translation conventions: what stays byte-identical, header format, style
-├── glossary/               # one term = one Russian translation across all papers
+├── glossary/               # one term = one consistent translation across all papers
 └── papers/                 # one folder per paper
     └── YYYY-name/
         ├── index.md        # translation / summary = future site page
