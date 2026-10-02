@@ -10,9 +10,11 @@
 ![License of translations](https://img.shields.io/badge/Переводы-CC%20BY%204.0-18794e?style=flat-square)
 ![Originals](https://img.shields.io/badge/Оригиналы-Open%20access-915930?style=flat-square)
 
-**[Индекс статей](#статьи)** | [Правила перевода](TRANSLATION.md) | [Глоссарий](glossary/README.md) | [О статусах](#статусы-перевода)
+**[Индекс статей](#статьи)** | [Правила перевода](TRANSLATION.md) | [Глоссарий](glossary/README.md)
 
 </div>
+
+## Languages
 
 | Язык | README |
 | --- | --- |
@@ -33,15 +35,6 @@
 | 2026 | Сравнение Kraken2 vs MetaPhlAn4 | PLOS Computational Biology | [10.1371/journal.pcbi.1013883](https://doi.org/10.1371/journal.pcbi.1013883) | [PLOS](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013883) | CC BY 4.0 | — |
 
 Оригиналы НЕ копируются в этот репозиторий — каждый перевод ссылается на оригинал из таблицы выше и в своей шапке.
-
-## Статусы перевода
-
-| Статус | Значение |
-| --- | --- |
-| `—` | не начат |
-| `MT` | машинный перевод, не проверен |
-| `MT + LLM review` | машинный перевод, проверен второй моделью (числа, ссылки, терминология) |
-| `verified` | дополнительно вычитано человеком |
 
 В случае любых расхождений оригинал главнее.
 

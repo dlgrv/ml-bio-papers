@@ -10,9 +10,11 @@ Every translation states its original source (DOI), the license it is made under
 ![License of translations](https://img.shields.io/badge/Translations-CC%20BY%204.0-18794e?style=flat-square)
 ![Originals](https://img.shields.io/badge/Originals-Open%20access-915930?style=flat-square)
 
-**[Paper index](#papers)** | [Translation conventions](TRANSLATION.md) | [Glossary](glossary/README.md) | [About the statuses](#translation-statuses)
+**[Paper index](#papers)** | [Translation conventions](TRANSLATION.md) | [Glossary](glossary/README.md)
 
 </div>
+
+## Languages
 
 | Language | README |
 | --- | --- |
@@ -33,15 +35,6 @@ Every translation states its original source (DOI), the license it is made under
 | 2026 | Kraken2 vs MetaPhlAn4 comparison | PLOS Computational Biology | [10.1371/journal.pcbi.1013883](https://doi.org/10.1371/journal.pcbi.1013883) | [PLOS](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013883) | CC BY 4.0 | — |
 
 Originals are NOT copied into this repository — each translation links the original above and in its header.
-
-## Translation statuses
-
-| Status | Meaning |
-| --- | --- |
-| `—` | not started |
-| `MT` | machine translation, unchecked |
-| `MT + LLM review` | machine translation verified by a second model (numbers, links, terminology) |
-| `verified` | additionally proofread by a human |
 
 In case of any discrepancy, the original prevails.
 
