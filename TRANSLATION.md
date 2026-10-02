@@ -1,6 +1,20 @@
-# Правила перевода (TRANSLATION.md)
+# Translation conventions (TRANSLATION.md)
 
-Единые конвенции для всех переводов репозитория.
+Unified conventions for all translations in this repository.
+
+## Per-paper pipeline
+
+1. Extract text from PMC (not PDF — clean text, no OCR errors).
+2. MT translation (subagent; glossary from `glossary/` is mandatory).
+3. Scripted verification: heading/link/DOI/number counts must match the original.
+4. Review by a second model against the MQM rubric → apply fixes → re-run scripted check.
+5. Fill `meta.yml` + translation header; update the tables in README.md / README.ru.md.
+6. (optional) Zenodo DOI, add to meta.yml.
+
+## Pilot and reading order
+
+Pilot: **Kraken2** (shortest paper). Reading order from the project brief:
+NCBI Taxonomy (10 min, not a paper) → Kraken2 → MetaPhlAn4 → PLOS comparison → Taxometer → Perseus → YACHT (most math-heavy, do last).
 
 ## Не переводится (байт-в-байт из оригинала)
 
