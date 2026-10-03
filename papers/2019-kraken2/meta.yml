@@ -1,8 +1,9 @@
-title: "2019-kraken2"
-authors: []
-doi: ""
-journal: ""
-year:
-license: ""
-status: "not-started"
+title: "Improved metagenomic analysis with Kraken 2"
+authors: ["Derrick E. Wood", "Jennifer Lu", "Ben Langmead"]
+doi: "10.1186/s13059-019-1891-0"
+pmcid: "PMC6883579"
+journal: "Genome Biology"
+year: 2019
+license: "CC BY 4.0"
+status: "machine-translated"
 zenodo-doi: ""
