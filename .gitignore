@@ -1,0 +1,5 @@
+.env
+translate/runs/
+__pycache__/
+.venv/
+/site/

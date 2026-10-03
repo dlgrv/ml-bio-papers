@@ -1,0 +1,546 @@
+[
+ {
+  "label": "read",
+  "en": [
+   "read"
+  ],
+  "ru": [
+   "рид"
+  ],
+  "ru_raw": "рид",
+  "note": "",
+  "ru_stems": [
+   "рид"
+  ],
+  "gloss": "короткий фрагмент ДНК после секвенирования",
+  "paren_en": "first"
+ },
+ {
+  "label": "contig",
+  "en": [
+   "contig"
+  ],
+  "ru": [
+   "контиг"
+  ],
+  "ru_raw": "контиг",
+  "note": "",
+  "ru_stems": [
+   "конт"
+  ],
+  "gloss": "собранная из ридов более длинная последовательность",
+  "paren_en": "first"
+ },
+ {
+  "label": "MAG (metagenome-assembled genome)",
+  "en": [
+   "MAG",
+   "metagenome-assembled genome"
+  ],
+  "ru": [
+   "MAG",
+   "метагеномный геном"
+  ],
+  "ru_raw": "MAG, метагеномный геном",
+  "note": "не расшифровывать каждый раз",
+  "ru_stems": [
+   "mag",
+   "метагеномн",
+   "ген"
+  ],
+  "gloss": "",
+  "paren_en": "never"
+ },
+ {
+  "label": "k-mer",
+  "en": [
+   "k-mer"
+  ],
+  "ru": [
+   "k-мер"
+  ],
+  "ru_raw": "k-мер",
+  "note": "",
+  "ru_stems": [
+   "k-м"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "minimizer",
+  "en": [
+   "minimizer"
+  ],
+  "ru": [
+   "минимизатор"
+  ],
+  "ru_raw": "минимизатор",
+  "note": "",
+  "ru_stems": [
+   "минимизат"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "lowest common ancestor (LCA)",
+  "en": [
+   "lowest common ancestor",
+   "LCA"
+  ],
+  "ru": [
+   "наименьший общий предок"
+  ],
+  "ru_raw": "наименьший общий предок",
+  "note": "при первом употреблении — LCA",
+  "ru_stems": [
+   "наименьш",
+   "общ",
+   "пред"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "marker gene",
+  "en": [
+   "marker gene"
+  ],
+  "ru": [
+   "маркерный ген"
+  ],
+  "ru_raw": "маркерный ген",
+  "note": "",
+  "ru_stems": [
+   "маркерн",
+   "ген"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "reference database",
+  "en": [
+   "reference database"
+  ],
+  "ru": [
+   "референсная база"
+  ],
+  "ru_raw": "референсная база",
+  "note": "не «эталонная»",
+  "ru_stems": [
+   "референсн",
+   "баз"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "abundance",
+  "en": [
+   "abundance"
+  ],
+  "ru": [
+   "обилие"
+  ],
+  "ru_raw": "обилие",
+  "note": "",
+  "ru_stems": [
+   "обил"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "coverage",
+  "en": [
+   "coverage"
+  ],
+  "ru": [
+   "покрытие"
+  ],
+  "ru_raw": "покрытие",
+  "note": "",
+  "ru_stems": [
+   "покрыт"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "tetranucleotide frequency (TNF)",
+  "en": [
+   "tetranucleotide frequency",
+   "TNF"
+  ],
+  "ru": [
+   "тетрануклеотидные частоты"
+  ],
+  "ru_raw": "тетрануклеотидные частоты",
+  "note": "",
+  "ru_stems": [
+   "тетрануклеотидн",
+   "часто"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "binning",
+  "en": [
+   "binning"
+  ],
+  "ru": [
+   "биннинг"
+  ],
+  "ru_raw": "биннинг",
+  "note": "",
+  "ru_stems": [
+   "бинни"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "species-level genome bin (SGB)",
+  "en": [
+   "species-level genome bin",
+   "SGB"
+  ],
+  "ru": [
+   "SGB"
+  ],
+  "ru_raw": "SGB",
+  "note": "не переводить",
+  "ru_stems": [
+   "sgb"
+  ],
+  "gloss": "",
+  "paren_en": "never"
+ },
+ {
+  "label": "taxonomic rank",
+  "en": [
+   "taxonomic rank"
+  ],
+  "ru": [
+   "таксономический ранг"
+  ],
+  "ru_raw": "таксономический ранг",
+  "note": "",
+  "ru_stems": [
+   "таксономическ",
+   "ран"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "lineage",
+  "en": [
+   "lineage"
+  ],
+  "ru": [
+   "таксономическая линия"
+  ],
+  "ru_raw": "таксономическая линия",
+  "note": "",
+  "ru_stems": [
+   "таксономическ",
+   "лин"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "confidence score",
+  "en": [
+   "confidence score"
+  ],
+  "ru": [
+   "оценка уверенности"
+  ],
+  "ru_raw": "оценка уверенности",
+  "note": "",
+  "ru_stems": [
+   "оцен",
+   "увереннос"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "calibration",
+  "en": [
+   "calibration"
+  ],
+  "ru": [
+   "калибровка"
+  ],
+  "ru_raw": "калибровка",
+  "note": "",
+  "ru_stems": [
+   "калибров"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "ground truth",
+  "en": [
+   "ground truth"
+  ],
+  "ru": [
+   "эталонные данные"
+  ],
+  "ru_raw": "эталонные данные",
+  "note": "",
+  "ru_stems": [
+   "эталонн",
+   "данн"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "supervised learning",
+  "en": [
+   "supervised learning"
+  ],
+  "ru": [
+   "обучение с учителем"
+  ],
+  "ru_raw": "обучение с учителем",
+  "note": "",
+  "ru_stems": [
+   "обучен",
+   "с",
+   "учител"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "ensemble",
+  "en": [
+   "ensemble"
+  ],
+  "ru": [
+   "ансамбль"
+  ],
+  "ru_raw": "ансамбль",
+  "note": "",
+  "ru_stems": [
+   "ансамб"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "stacking",
+  "en": [
+   "stacking"
+  ],
+  "ru": [
+   "стекинг"
+  ],
+  "ru_raw": "стекинг",
+  "note": "",
+  "ru_stems": [
+   "стеки"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "hypothesis testing",
+  "en": [
+   "hypothesis testing"
+  ],
+  "ru": [
+   "проверка статистических гипотез"
+  ],
+  "ru_raw": "проверка статистических гипотез",
+  "note": "",
+  "ru_stems": [
+   "провер",
+   "статистическ",
+   "гипот"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "average nucleotide identity (ANI)",
+  "en": [
+   "average nucleotide identity",
+   "ANI"
+  ],
+  "ru": [
+   "средняя нуклеотидная идентичность"
+  ],
+  "ru_raw": "средняя нуклеотидная идентичность (ANI)",
+  "note": "",
+  "ru_stems": [
+   "средн",
+   "нуклеотидн",
+   "идентичнос"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "long reads",
+  "en": [
+   "long reads"
+  ],
+  "ru": [
+   "длинные риды"
+  ],
+  "ru_raw": "длинные риды",
+  "note": "",
+  "ru_stems": [
+   "длинн",
+   "рид"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "assembly",
+  "en": [
+   "assembly"
+  ],
+  "ru": [
+   "сборка"
+  ],
+  "ru_raw": "сборка (генома)",
+  "note": "",
+  "ru_stems": [
+   "сбор"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "translated search",
+  "en": [
+   "translated search"
+  ],
+  "ru": [
+   "трансляционный поиск"
+  ],
+  "ru_raw": "трансляционный поиск",
+  "note": "",
+  "ru_stems": [
+   "трансляционн",
+   "пои"
+  ],
+  "gloss": "поиск по белкам после трансляции ридов",
+  "paren_en": "first"
+ },
+ {
+  "label": "hash table",
+  "en": [
+   "hash table"
+  ],
+  "ru": [
+   "хеш-таблица"
+  ],
+  "ru_raw": "хеш-таблица",
+  "note": "",
+  "ru_stems": [
+   "хеш-табли"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "compact hash table (CHT)",
+  "en": [
+   "compact hash table",
+   "CHT"
+  ],
+  "ru": [
+   "компактная хеш-таблица"
+  ],
+  "ru_raw": "компактная хеш-таблица",
+  "note": "при первом употреблении — CHT",
+  "ru_stems": [
+   "компактн",
+   "хеш-табли"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "spaced seed",
+  "en": [
+   "spaced seed"
+  ],
+  "ru": [
+   "разреженная затравка"
+  ],
+  "ru_raw": "разреженная затравка",
+  "note": "при первом употреблении — (spaced seed)",
+  "ru_stems": [
+   "разреженн",
+   "затрав"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "positive predictive value (PPV)",
+  "en": [
+   "positive predictive value",
+   "PPV"
+  ],
+  "ru": [
+   "положительная прогностическая ценность"
+  ],
+  "ru_raw": "положительная прогностическая ценность",
+  "note": "при первом употреблении — PPV",
+  "ru_stems": [
+   "положительн",
+   "прогностическ",
+   "ценнос"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "reference genome",
+  "en": [
+   "reference genome"
+  ],
+  "ru": [
+   "референсный геном"
+  ],
+  "ru_raw": "референсный геном",
+  "note": "не «эталонный», не «справочный»",
+  "ru_stems": [
+   "референсн",
+   "ген"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "sensitivity",
+  "en": [
+   "sensitivity"
+  ],
+  "ru": [
+   "чувствительность"
+  ],
+  "ru_raw": "чувствительность",
+  "note": "",
+  "ru_stems": [
+   "чувствительнос"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ }
+]

@@ -1,0 +1,57 @@
+name: test
+
+on:
+  push:
+    branches: [main, master, "feat/**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system deps
+        run: sudo apt-get update && sudo apt-get install -y pandoc shellcheck
+
+      - name: Install Python deps
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install -U pip
+          .venv/bin/pip install -r requirements-dev.txt
+
+      - name: No committed bytecode
+        run: |
+          if git ls-files | grep -E '(__pycache__/|\.pyc$)'; then
+            echo "committed bytecode found" >&2
+            git ls-files | grep -E '(__pycache__/|\.pyc$)' >&2
+            exit 1
+          fi
+
+      - name: Lint
+        run: make lint
+
+      - name: Test
+        run: make test
+
+      - name: Commit messages on PR range
+        if: github.event_name == 'pull_request'
+        run: |
+          export PYTHONPATH=$PWD
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          failed=0
+          while IFS= read -r sha; do
+            msg=$(git log -1 --format=%B "$sha")
+            if ! printf '%s\n' "$msg" | .venv/bin/python translate/ops/check_commit_msg.py --stdin; then
+              echo "bad commit: $sha"
+              failed=1
+            fi
+          done < <(git rev-list --reverse "${base}..${head}")
+          exit $failed

@@ -4,37 +4,50 @@ Unified conventions for all translations in this repository.
 
 ## Per-paper pipeline
 
-1. Extract text from PMC (not PDF — clean text, no OCR errors).
-2. MT translation (subagent; glossary from `glossary/` is mandatory).
-3. Scripted verification: heading/link/DOI/number counts must match the original.
-4. Review by a second model against the MQM rubric → apply fixes → re-run scripted check.
-5. Fill `meta.yml` + translation header; update the tables in README.md / README.ru.md.
-6. (optional) Zenodo DOI, add to meta.yml.
+```bash
+make hooks                              # once per clone
+make paper SLUG=2019-kraken2            # full run (needs LLM server + network for PMC)
+make verify SLUG=2019-kraken2
+make review SLUG=2019-kraken2           # advisory MQM pack
+make status
+make site
+```
+
+Steps: `fetch → digest → assets → translate → render → verify → repair → verify_final → publish → site`.
+
+Details: [translate/README.md](translate/README.md).
+
+1. Fetch JATS from PMC (`meta.yml` → `pmcid`).
+2. Digest into units; download figure binaries into `papers/<slug>/assets/`.
+3. MT translation (glossary from `glossary/` is mandatory).
+4. Scripted verification (structure, numbers, DOI/URLs in document order, citations, figures, glossary).
+5. Automated repair ≤2 rounds/unit; then `fix_unit` / human or driving agent.
+6. `make review` → MQM checklist (advisory); apply fixes; re-verify.
+7. Publish header + PDF; update README tables; optional Zenodo DOI.
 
 ## Pilot and reading order
 
-Pilot: **Kraken2** (shortest paper). Reading order from the project brief:
-NCBI Taxonomy (10 min, not a paper) → Kraken2 → MetaPhlAn4 → PLOS comparison → Taxometer → Perseus → YACHT (most math-heavy, do last).
+Pilot: **Kraken 2** (2019). Reading order: NCBI Taxonomy (10 min) → Kraken 2 → MetaPhlAn4 → PLOS comparison → Taxometer → Perseus → YACHT.
 
-## Не переводится (байт-в-байт из оригинала)
+## Do not translate (byte-identical from the source)
 
-- DOI, URL, имена авторов, названия программ (Kraken2, MetaPhlAn4, Taxometer, Perseus, YACHT, Bracken, MMSeqs2, Centrifuge, Metabuli, sourmash).
-- **Все числа и единицы** — символ в символ. Десятичный разделитель остаётся точкой: `66.6%`, не `66,6%`.
-- Названия датасетов (CAMI2, Rhizosphere) и баз (NCBI Taxonomy, GTDB).
+- DOI, URL, author names, software names (Kraken2, MetaPhlAn4, Taxometer, Perseus, YACHT, Bracken, MMSeqs2, Centrifuge, Metabuli, sourmash).
+- **All numbers and units** — character for character. Decimal point stays `.` (`66.6%`, not `66,6%`).
+- Dataset names (CAMI2, Rhizosphere) and databases (NCBI Taxonomy, GTDB).
 
-## Глоссарий
+## Glossary
 
-См. `glossary/` — один термин = один единый перевод во всех статьях. Новый термин добавляется в глоссарий в том же PR, где впервые появился.
+See `glossary/` — one term, one translation across papers. First use: Russian + `(english)` and optional reader gloss; later Russian only (abbreviations: full + `(ABBR)` once). Add new terms in the same PR that introduces them. Runtime reads `glossary/terms.json` (`make glossary-build` from `glossary/README.md`).
 
-## Обязательная шапка каждой статьи
+## Required header
+
+Minimal attribution only (no PMC/`assets/` notes, no MT status):
 
 ```markdown
-> **Неофициальный перевод.** Оригинал: {авторы}. «{название}». {журнал}, {год}.
-> DOI: [{doi}](https://doi.org/{doi}). Лицензия оригинала: {license}.
-> Перевод: {статус}, {дата}. В случае расхождений оригинал главнее.
+> **Неофициальный перевод.** Оригинал: {authors}. «{title}». {journal}, {year}. DOI: [{doi}](https://doi.org/{doi}). Лицензия: {license}.
 ```
 
-## Стиль
+## Style
 
-- Читаемость важнее буквальности: не калькировать английский синтаксис.
-- Каждый перевод проходит проверку: скриптовую (числа, DOI, ссылки — количество и значения совпадают с оригиналом) и ревью второй моделью по рубрике MQM.
+- Readability over calque.
+- Scripted verify is the only gate; review pack is advisory.

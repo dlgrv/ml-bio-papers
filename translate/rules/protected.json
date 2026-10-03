@@ -1,0 +1,14 @@
+{
+  "terms": [
+    "Kraken", "Kraken2", "Bracken", "MetaPhlAn", "MetaPhlAn4", "Taxometer", "Perseus", "YACHT",
+    "MMSeqs2", "Centrifuge", "Metabuli", "sourmash", "CLARK", "Kaiju", "DIAMOND", "BLAST",
+    "Mason", "CAMI2", "GTDB", "NCBI", "RefSeq", "GenBank", "FDA-ARGOS", "UniVec", "GitHub"
+  ],
+  "patterns": [
+    "NC_\\d+(?:\\.\\d+)?",
+    "NZ_[A-Z]+\\d+(?:\\.\\d+)?",
+    "PRJNA\\d+",
+    "SRR\\d+",
+    "GC[AF]_\\d+(?:\\.\\d+)?"
+  ]
+}
