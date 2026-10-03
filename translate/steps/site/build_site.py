@@ -104,7 +104,7 @@ def pandoc_html(md: str) -> str:
             "markdown+tex_math_dollars+pipe_tables",
             "-t",
             "html5",
-            "--math-method=mathml",
+            "--mathml",
             "--section-divs",
             "--wrap=none",
         ],
