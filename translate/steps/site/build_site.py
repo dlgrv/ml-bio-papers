@@ -128,6 +128,12 @@ FIG_CAPTION_ONLY_RE = re.compile(
     re.DOTALL,
 )
 OL_RE = re.compile(r"(<h2>Список литературы</h2>\s*)<ol[^>]*>")
+REFS_OL_RE = re.compile(r'(<ol class="references">)(.*?)(</ol>)', re.DOTALL)
+LI_OPEN_RE = re.compile(r"<li\b([^>]*)>", re.IGNORECASE)
+CITE_GROUP_RE = re.compile(r"\[(\d+(?:\s*[,–-]\s*\d+)*)\]")
+SUP_CITE_RE = re.compile(r"<sup>(\d+(?:\s*[,–-]\s*\d+)*)</sup>")
+CITE_NUM_RE = re.compile(r"\d+")
+A_TAG_RE = re.compile(r"<a\b[^>]*>.*?</a>", re.DOTALL | re.IGNORECASE)
 
 
 def split_note(md: str) -> tuple[str, str]:
@@ -137,6 +143,49 @@ def split_note(md: str) -> tuple[str, str]:
     while n < len(lines) and lines[n].startswith(">"):
         n += 1
     return "\n".join(x.lstrip("> ").rstrip() for x in lines[:n]), "\n".join(lines[n:]).lstrip("\n")
+
+
+def anchor_references(body: str) -> str:
+    """Add id=\"ref-N\" to each <li> under ol.references (1-based list order)."""
+
+    def on_ol(m: re.Match[str]) -> str:
+        n = 0
+
+        def on_li(lm: re.Match[str]) -> str:
+            nonlocal n
+            n += 1
+            attrs = lm.group(1)
+            if re.search(r"\bid\s*=", attrs, re.IGNORECASE):
+                return lm.group(0)
+            return f'<li id="ref-{n}"{attrs}>'
+
+        return m.group(1) + LI_OPEN_RE.sub(on_li, m.group(2)) + m.group(3)
+
+    return REFS_OL_RE.sub(on_ol, body)
+
+
+def _link_cite_nums(inner: str) -> str:
+    return CITE_NUM_RE.sub(
+        lambda m: f'<a href="#ref-{m.group(0)}" class="cite">{m.group(0)}</a>',
+        inner,
+    )
+
+
+def _linkify_segment(text: str) -> str:
+    text = CITE_GROUP_RE.sub(lambda m: "[" + _link_cite_nums(m.group(1)) + "]", text)
+    return SUP_CITE_RE.sub(lambda m: "<sup>" + _link_cite_nums(m.group(1)) + "</sup>", text)
+
+
+def link_citations(body: str) -> str:
+    """Wrap in-text [n]/[n,m]/[n–m] and numeric <sup>…</sup> as links to #ref-N."""
+    parts: list[str] = []
+    last = 0
+    for m in A_TAG_RE.finditer(body):
+        parts.append(_linkify_segment(body[last : m.start()]))
+        parts.append(m.group(0))
+        last = m.end()
+    parts.append(_linkify_segment(body[last:]))
+    return "".join(parts)
 
 
 def decorate(body: str) -> str:
@@ -154,7 +203,9 @@ def decorate(body: str) -> str:
         return f'<div class="figure-box"><p>{m.group(1)}</p></div>'
 
     body = FIG_CAPTION_ONLY_RE.sub(wrap_caption, body)
-    return OL_RE.sub(r'\1<ol class="references">', body)
+    body = OL_RE.sub(r'\1<ol class="references">', body)
+    body = anchor_references(body)
+    return link_citations(body)
 
 
 def shell(title: str, description: str, article: str, *, depth: int) -> str:
