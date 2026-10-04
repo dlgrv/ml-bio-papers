@@ -91,11 +91,41 @@ def test_article_page_uses_paper_layout(tmp_path):
     assert "<math" in page
     assert '<div class="figure-box">' in page
     assert '<ol class="references">' in page
+    assert 'id="ref-1"' in page
+    assert 'href="#ref-1" class="cite"' in page
     assert "плашка" in page
     assert 'href="index.pdf"' in page
     assert 'class="meta-sep"' in page
     assert (out / "2019-a" / "index.pdf").read_bytes() == b"%PDF"
     assert (out / "static" / "fonts" / "f.woff2").read_bytes() == b"f"
+
+
+def test_citations_link_to_reference_anchors(tmp_path):
+    _paper(tmp_path, "2019-a")
+    (tmp_path / "papers" / "2019-a" / "index.md").write_text(
+        "# Заголовок\n\n"
+        "## Раздел\n\n"
+        "See [1] and [2, 3] plus [4–6] and <sup>7</sup> "
+        "and [SGB](https://example.com/x) and "
+        '<a href="https://doi.org/10.1/x">doi [9]</a>.\n\n'
+        "## Список литературы\n\n"
+        "1. One.\n2. Two.\n3. Three.\n4. Four.\n5. Five.\n6. Six.\n7. Seven.\n",
+        encoding="utf-8",
+    )
+    build_site.build(tmp_path, tmp_path / "out")
+    page = (tmp_path / "out" / "2019-a" / "index.html").read_text(encoding="utf-8")
+    assert 'id="ref-1"' in page
+    assert 'id="ref-7"' in page
+    assert 'href="#ref-1" class="cite">1</a>' in page
+    assert 'href="#ref-2" class="cite">2</a>' in page
+    assert 'href="#ref-3" class="cite">3</a>' in page
+    assert 'href="#ref-4" class="cite">4</a>' in page
+    assert 'href="#ref-6" class="cite">6</a>' in page
+    assert 'href="#ref-7" class="cite">7</a>' in page
+    # Non-numeric markdown link and numbers already inside <a> stay untouched.
+    assert 'href="https://example.com/x"' in page
+    assert 'href="https://doi.org/10.1/x">doi [9]</a>' in page
+    assert 'href="#ref-9"' not in page
 
 
 def test_titles_are_html_escaped(tmp_path):
@@ -130,6 +160,8 @@ def test_site_paper_css_keeps_reading_measure(tmp_path):
     css = (tmp_path / "out" / "static" / "paper.css").read_text(encoding="utf-8")
     assert "65ch" in css
     assert "margin-inline: auto" in css
+    assert "a.cite" in css
+    assert "li:target" in css
 
 
 def test_site_html_has_img_src_assets(tmp_path):

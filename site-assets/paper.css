@@ -247,6 +247,18 @@
 .tl_article--paper ol.references li::before {
   content: counter(ref) ". ";
 }
+.tl_article--paper ol.references li:target {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 2px;
+  outline: 1px solid var(--line);
+}
+.tl_article--paper a.cite {
+  color: inherit;
+  text-decoration: none;
+}
+.tl_article--paper a.cite:hover {
+  text-decoration: underline;
+}
 .tl_article--paper .paper-footer {
   font-family: var(--serif);
   font-size: 1rem;
@@ -286,4 +298,10 @@ html.dark .tl_article--paper .figure-box p {
 }
 html.dark .tl_article--paper address .meta-sep {
   color: var(--mut);
+}
+html.dark .tl_article--paper ol.references li:target {
+  background: rgba(255, 255, 255, 0.06);
+}
+html.dark .tl_article--paper a.cite {
+  color: inherit;
 }
