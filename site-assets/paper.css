@@ -253,7 +253,6 @@
   outline: 1px solid var(--line);
 }
 .tl_article--paper a.cite {
-  color: inherit;
   text-decoration: none;
 }
 .tl_article--paper a.cite:hover {
@@ -301,7 +300,4 @@ html.dark .tl_article--paper address .meta-sep {
 }
 html.dark .tl_article--paper ol.references li:target {
   background: rgba(255, 255, 255, 0.06);
-}
-html.dark .tl_article--paper a.cite {
-  color: inherit;
 }
