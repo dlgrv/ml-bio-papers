@@ -204,7 +204,13 @@ def _element_citation(cit: ET.Element) -> str:
 def _mixed_citation(cit: ET.Element) -> str:
     text = cit.text or ""
     for ch in cit:
-        if ch.tag == "pub-id" or _is_doi_comment(ch):
+        if ch.tag == "pub-id":
+            if ch.get("pub-id-type") == "doi" and (ch.text or "").strip():
+                text = _strip_trailing_doi_marker(text)
+                if text and not text[-1].isspace():
+                    text += " "
+                text += f"doi:{ch.text.strip()}"
+        elif _is_doi_comment(ch):
             pass
         elif ch.tag == "name":
             text += _format_name(ch)
