@@ -1,8 +1,23 @@
-title: "2026-k2-vs-mpa4"
-authors: []
-doi: ""
-journal: ""
-year:
-license: ""
-status: "not-started"
+title: >-
+  Integrative analysis across metagenomic taxonomic classifiers:
+  A case study of the gut microbiome in aging and longevity
+  in the Integrative Longevity Omics Study
+authors:
+  - "Tanya T. Karagiannis"
+  - "Ye Chen"
+  - "Sarah Bald"
+  - "Albert Tai"
+  - "Eric R. Reed"
+  - "Sofiya Milman"
+  - "Stacy L. Andersen"
+  - "Thomas T. Perls"
+  - "Daniel Segrè"
+  - "Paola Sebastiani"
+  - "Meghan I. Short"
+doi: "10.1371/journal.pcbi.1013883"
+pmcid: "PMC12810900"
+journal: "PLOS Computational Biology"
+year: 2026
+license: "CC BY 4.0"
+status: "machine-translated"
 zenodo-doi: ""
