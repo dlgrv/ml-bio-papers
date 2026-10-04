@@ -243,14 +243,10 @@
   counter-increment: ref;
   margin: 0 0 1rem;
   padding: 0 0 1rem;
+  scroll-margin-top: 45vh;
 }
 .tl_article--paper ol.references li::before {
   content: counter(ref) ". ";
-}
-.tl_article--paper ol.references li:target {
-  background: rgba(0, 0, 0, 0.04);
-  border-radius: 2px;
-  outline: 1px solid var(--line);
 }
 .tl_article--paper a.cite {
   text-decoration: none;
@@ -297,7 +293,4 @@ html.dark .tl_article--paper .figure-box p {
 }
 html.dark .tl_article--paper address .meta-sep {
   color: var(--mut);
-}
-html.dark .tl_article--paper ol.references li:target {
-  background: rgba(255, 255, 255, 0.06);
 }
