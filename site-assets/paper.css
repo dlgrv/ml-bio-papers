@@ -245,6 +245,10 @@
   padding: 0 0 1rem;
   scroll-margin-top: 45vh;
 }
+.tl_article--paper ol.references li:target,
+.tl_article--paper ol.references li:focus {
+  outline: none;
+}
 .tl_article--paper ol.references li::before {
   content: counter(ref) ". ";
 }
