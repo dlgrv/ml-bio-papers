@@ -167,12 +167,12 @@ def _is_doi_comment(el: ET.Element) -> bool:
 
 def _ref_md(ref: ET.Element) -> str:
     label = _ref_label(ref.findtext("label") or "")
-    cit = ref.find("element-citation")
-    if cit is None:
-        cit = ref.find("mixed-citation")
+    mixed = ref.find(".//mixed-citation")
+    element = ref.find(".//element-citation")
+    cit = mixed if mixed is not None else element
     if cit is None:
         return label
-    body = _element_citation(cit) if cit.tag == "element-citation" else _mixed_citation(cit)
+    body = _mixed_citation(cit) if cit.tag == "mixed-citation" else _element_citation(cit)
     body = _strip_trailing_doi_marker(body)
     doi = _citation_doi(cit)
     parts = [p for p in (label, body) if p]

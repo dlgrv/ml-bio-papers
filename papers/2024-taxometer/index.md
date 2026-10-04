@@ -188,50 +188,50 @@ $$F1\_{score}=\frac{2 \cdot {precision} \cdot {recall}}{{precision}+{recall}}$$
 
 ## Список литературы
 
-1.
+1. Hyatt, D. et al. Prodigal: prokaryotic gene recognition and translation initiation site identification. BMC Bioinform.11, 119 (2010). doi:10.1186/1471-2105-11-119
 2. Wood, D. E., Lu, J. & Langmead, B. Improved metagenomic analysis with kraken 2. Genome Biol.20, 257 (2019). doi:10.1186/s13059-019-1891-0
-3.
-4.
-5.
+3. Mirdita, M., Steinegger, M., Breitwieser, F., Söding, J. & Karin, E. L. Fast and sensitive taxonomic assignment to metagenomic contigs. Bioinformatics37, 3029–3031 (2021). doi:10.1093/bioinformatics/btab184
+4. Lu, J., Breitwieser, F. P., Thielen, P. & Salzberg, S. L. Bracken: estimating species abundance in metagenomics data. Peer J. Comput. Sci.3, e104 (2017). doi:10.7717/peerj-cs.104
+5. Kim, D., Song, L., Breitwieser, F. P. & Salzberg, S. L. Centrifuge: rapid and sensitive classification of metagenomic sequences. Genome Res.26, 1721–1729 (2016). doi:10.1101/gr.210641.116
 6. Blanco-M´ıguez, A. et al. Extending and improving metagenomic taxonomic profiling with uncharacterized species using MetaPhlAn 4. Nat. Biotechnol. 47, 1633–1644 (2023). doi:10.1038/s41587-023-01688-w
 7. Milanese, A. et al. Microbial abundance, activity and population genomic profiling with mOTUs2. Nat. Commun.10, 1014 (2019). doi:10.1038/s41467-019-08844-4
 8. Portik, D. M., Brown, C. T. & Pierce-Ward, N. T. Evaluation of taxonomic classification and profiling methods for long-read shotgun metagenomic sequencing datasets. BMC Bioinform.23, 541 (2022). doi:10.1186/s12859-022-05103-0
-9.
-10.
-11.
-12.
-13.
-14.
-15.
-16.
-17.
+9. Albertsen, M. et al. Genome sequences of rare, uncultured bacteria obtained by differential coverage binning of multiple metagenomes. Nat. Biotechnol.31, 533–538 (2013). doi:10.1038/nbt.2579
+10. Alneberg, J. et al. Binning metagenomic contigs by coverage and composition. Nat. Methods11, 1144–1146 (2014). doi:10.1038/nmeth.3103
+11. Imelfort, M. et al. GroopM: an automated tool for the recovery of population genomes from related metagenomes. PeerJ2, e603 (2014). doi:10.7717/peerj.603
+12. Wu, Y.-W., Simmons, B. A. & Singer, S. W. MaxBin 2.0: an automated binning algorithm to recover genomes from multiple metagenomic datasets. Bioinformatics32, 605–607 (2016). doi:10.1093/bioinformatics/btv638
+13. Kang, D. D. et al. MetaBAT 2: an adaptive binning algorithm for robust and efficient genome reconstruction from metagenome assemblies. PeerJ7, e7359 (2019). doi:10.7717/peerj.7359
+14. Nissen, J. N. et al. Improved metagenome binning and assembly using deep variational autoencoders. Nat. Biotechnol.39, 555–560 (2021). doi:10.1038/s41587-020-00777-4
+15. Nayfach, S. et al. A genomic catalog of earth’s microbiomes. Nat. Biotechnol.39, 499–509 (2021). doi:10.1038/s41587-020-0718-6
+16. Nishimura, Y. & Yoshizawa, S. The OceanDNA MAG catalog contains over 50,000 prokaryotic genomes originated from various marine environments. Sci. Data9, 305 (2022). doi:10.1038/s41597-022-01392-5
+17. Almeida, A. et al. A unified catalog of 204,938 reference genomes from the human gut microbiome. Nat. Biotechnol.39, 105–114 (2021). doi:10.1038/s41587-020-0603-3
 18. Morin, F. & Bengio, Y. Hierarchical probabilistic neural network language model. In Proc. Tenth International Workshop on Artificial Intelligence and Statistics. 246–252 (PMLR, 2005).
 19. Redmon, J., Divvala, S., Girshick, R. & Farhadi, A. You only look once: unified, real-time object detection. arXiv10.48550/arXiv.1506.02640 (2016).
 20. Valmadre, J. Oh, A. H., Agarwal, A., Belgrave, D. & Cho, K. (eds) Hierarchical classification at multiple operating points. Adv. Neural Inform. Process. Syst.10.48550/arXiv.2210.10929 (2022).
-21.
-22.
-23.
-24.
-25.
-26.
+21. Wang, Q., Garrity, G. M., Tiedje, J. M. & Cole, J. R. Naive bayesian classifier for rapid assignment of rrna sequences into the new bacterial taxonomy. Appl. Environ. Microbiol.73, 5261–5267 (2007). doi:10.1128/AEM.00062-07
+22. Slabbinck, B., Waegeman, W., Dawyndt, P., De Vos, P. & De Baets, B. From learning taxonomies to phylogenetic learning: integration of 16s rrna gene data into fame-based bacterial classification. BMC Bioinform.11, 1–16 (2010). doi:10.1186/1471-2105-11-69
+23. Tafintseva, V. et al. Hierarchical classification of microorganisms based on highdimensional phenotypic data. J. Biophoton.11, e201700047 (2018). doi:10.1002/jbio.201700047
+24. Udelhoven, T., Naumann, D. & Schmitt, J. Development of a hierarchical classification system with artificial neural networks and ft-ir spectra for the identification of bacteria. Appl. Spectrosc.54, 1471–1479 (2000).
+25. Liang, Q., Bible, P. W., Liu, Y., Zou, B. & Wei, L. DeepMicrobes: taxonomic classification for metagenomics with deep learning. NAR Genom. Bioinform2, lqaa009 (2020). doi:10.1093/nargab/lqaa009
+26. Mock, F., Kretschmer, F., Kriese, A., B¨ocker, S. & Marz, M. Taxonomic classification of DNA sequences beyond sequence similarity using deep neural networks. Proc. Natl Acad. Sci. USA.119, e2122636119 (2022). doi:10.1073/pnas.2122636119
 27. Xiao, L., Deng, L. & Liu, X. Metagenomic sequence classification based on one-dimensional convolutional neural network. In Proc. 2022 11th International Conference on Computing and Pattern Recognition. 191–196 (Association for Computing Machinery, New York, NY, USA, 2023).
-28.
-29.
+28. Fuhl, W., Zabel, S. & Nieselt, K. Improving taxonomic classification with feature space balancing. Bioinform. Adv.3, vbad092 (2023). doi:10.1093/bioadv/vbad092
+29. Wichmann, A. et al. MetaTransformer: deep metagenomic sequencing read classification using self-attention models. NAR Genom. Bioinform.5, lqad082 (2023). doi:10.1093/nargab/lqad082
 30. Kim, J. & Steinegger, M. Metabuli: sensitive and specific metagenomic classification via joint analysis of amino-acid and DNA. Nat. Methods21, 971–973 (2023). doi:10.1038/s41592-024-02273-y
-31.
-32.
-33.
+31. Parks, D. H. et al. GTDB: an ongoing census of bacterial and archaeal diversity through a phylogenetically consistent, rank normalized and complete genomebased taxonomy. Nucleic Acids Res.50, D785–D794 (2022). doi:10.1093/nar/gkab776
+32. Sayers, E. W. et al. Database resources of the national center for biotechnology information. Nucleic Acids Res.50, D20–D26 (2022). doi:10.1093/nar/gkab1112
+33. Dick, G. J. et al. Community-wide analysis of microbial genome sequence signatures. Genome Biol.10, R85 (2009). doi:10.1186/gb-2009-10-8-r85
 34. BioSciences, P. Data Release: Human Microbiome Samples Demonstrate Advances in Hifi-Enabled Metagenomic Sequencing. https://downloads.pacbcloud.com/public/dataset/Sequel-IIe-202104/metagenomics/ (2023).
-35.
+35. Meyer, F. et al. Critical assessment of metagenome interpretation: the second round of challenges. Nat. Methods19, 429–440 (2022). doi:10.1038/s41592-022-01431-4
 36. Li, H. Aligning sequence reads, clone sequences and assembly contigs with bwamem. arXiv Genom.10.48550/arXiv.1303.3997 (2013).
-37.
-38.
+37. Li, H. et al. The sequence alignment/Map format and SAMtools. Bioinformatics25, 2078–2079 (2009). doi:10.1093/bioinformatics/btp352
+38. Quince, C. et al. STRONG: metagenomics strain resolution on assembly graphs. Genome Biol.22, 214 (2021). doi:10.1186/s13059-021-02419-7
 39. Benoit, G. et al. Efficient High-Quality Metagenome Assembly from Long Accurate Reads using Minimizer-space de Bruijn Graphs.https://www.biorxiv.org/content/10.1101/2023.07.07.548136v1 (2023).
-40.
+40. Li, H. Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics34, 3094–3100 (2018). doi:10.1093/bioinformatics/bty191
 41. Camargo, A. Apcamargo/pycoverm: Simple Python Interface to CoverM’s Fast Coverage Estimation Functions.https://github.com/apcamargo/pycoverm/tree/main (2023).
-42.
-43.
-44.
+42. Chaumeil, P.-A., Mussig, A. J., Hugenholtz, P. & Parks, D. H. GTDB-tk v2: memory friendly classification with the genome taxonomy database. Bioinformatics38, 5315–5316 (2022). doi:10.1093/bioinformatics/btac672
+43. Schoch, C. L. et al. Ncbi taxonomy: a comprehensive update on curation, resources and tools. Database2020, baaa062 (2020). doi:10.1093/database/baaa062
+44. Dilthey, A., Jain, C., Koren, S. & Phillippy, A. Strain-level metagenomic assignment and compositional estimation for long reads with MetaMaps. Nat. Commun.10, 3066 (2019). doi:10.1038/s41467-019-10934-2
 45. Defazio, A. & Mishchenko, K. Learning-rate-free learning by d-adaptation. In Proc. 40th International Conference on Machine Learning. 7449–7479 (PMLR, 2023).
 46. Paszke, A. et al. PyTorch: An imperative style, high-performance deep learning library. In Proc. 33rd Conference on Neural Information Processing Systems. 8026–8037 (NeurIPS, 2019).
-47.
+47. Kutuzova, S., Nielsen, M., Lindez Piera, P., Nybo Nissen, J. & Rasmussen, S. Taxometer: Improving taxonomic classification of metagenomics contigs. Zenodo10.5281/zenodo.13379588 (2024). doi:10.1038/s41467-024-52771-y
