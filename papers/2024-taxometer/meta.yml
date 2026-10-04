@@ -1,8 +1,14 @@
-title: "2024-taxometer"
-authors: []
-doi: ""
-journal: ""
-year:
-license: ""
-status: "not-started"
+title: "Taxometer: Improving taxonomic classification of metagenomics contigs"
+authors:
+  - "Svetlana Kutuzova"
+  - "Mads Nielsen"
+  - "Pau Piera"
+  - "Jakob Nybo Nissen"
+  - "Simon Rasmussen"
+doi: "10.1038/s41467-024-52771-y"
+pmcid: "PMC11437175"
+journal: "Nature Communications"
+year: 2024
+license: "CC BY 4.0"
+status: "machine-translated"
 zenodo-doi: ""
