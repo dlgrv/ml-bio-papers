@@ -178,7 +178,7 @@ def test_site_paper_css_keeps_reading_measure(tmp_path):
     )
     build_site.build(tmp_path, tmp_path / "out")
     css = (tmp_path / "out" / "static" / "paper.css").read_text(encoding="utf-8")
-    assert "65ch" in css
+    assert "72ch" in css
     assert "margin-inline: auto" in css
     assert "a.cite" in css
     assert "scroll-margin-top" in css
