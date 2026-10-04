@@ -125,28 +125,56 @@ class _Digest:
             self.add("ref", src_id=ref.get("id"), translate=False, source_md=_ref_md(ref))
 
 
+def _ref_label(label: str) -> str:
+    label = label.strip()
+    if label.isdigit():
+        return f"{label}."
+    return label
+
+
+def _format_name(name_el: ET.Element) -> str:
+    return f"{name_el.findtext('surname', '')} {name_el.findtext('given-names', '')}".strip()
+
+
+def _citation_doi(cit: ET.Element) -> str | None:
+    for el in cit.iter("pub-id"):
+        if el.get("pub-id-type") == "doi" and el.text:
+            return el.text.strip()
+    return None
+
+
+def _strip_trailing_doi_marker(text: str) -> str:
+    trimmed = text.rstrip()
+    if trimmed.lower().endswith("doi:"):
+        return trimmed[: -len("doi:")].rstrip()
+    return trimmed
+
+
+def _is_doi_comment(el: ET.Element) -> bool:
+    if el.tag != "comment":
+        return False
+    return "".join(el.itertext()).strip().lower().rstrip(":") == "doi"
+
+
 def _ref_md(ref: ET.Element) -> str:
-    label = (ref.findtext("label") or "").strip()
+    label = _ref_label(ref.findtext("label") or "")
     cit = ref.find("element-citation")
     if cit is None:
         cit = ref.find("mixed-citation")
     if cit is None:
         return label
-    parts = [label] if label else []
-    if cit.tag == "element-citation":
-        parts.append(_element_citation(cit))
-    else:
-        parts.append(_mixed_citation(cit))
-    doi = next((e.text for e in cit.iter("pub-id") if e.get("pub-id-type") == "doi"), None)
-    if doi:
+    body = _element_citation(cit) if cit.tag == "element-citation" else _mixed_citation(cit)
+    body = _strip_trailing_doi_marker(body)
+    doi = _citation_doi(cit)
+    parts = [p for p in (label, body) if p]
+    if doi and doi not in body:
         parts.append(f"doi:{doi}")
-    return " ".join(p for p in parts if p)
+    return " ".join(parts)
 
 
 def _element_citation(cit: ET.Element) -> str:
     names = [
-        f"{n.findtext('surname', '')} {n.findtext('given-names', '')}".strip()
-        for n in cit.iterfind(".//person-group[@person-group-type='author']/name")
+        _format_name(n) for n in cit.iterfind(".//person-group[@person-group-type='author']/name")
     ]
     out = [", ".join(names) + "." if names else ""]
     out.extend(
@@ -167,7 +195,11 @@ def _element_citation(cit: ET.Element) -> str:
 def _mixed_citation(cit: ET.Element) -> str:
     text = cit.text or ""
     for ch in cit:
-        if ch.tag != "pub-id":
+        if ch.tag == "pub-id" or _is_doi_comment(ch):
+            pass
+        elif ch.tag == "name":
+            text += _format_name(ch)
+        else:
             text += "".join(ch.itertext())
         text += ch.tail or ""
     return " ".join(text.split())

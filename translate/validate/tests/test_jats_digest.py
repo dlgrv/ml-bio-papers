@@ -82,6 +82,27 @@ def test_refs_are_not_translated_and_have_stable_markdown(units):
     assert refs[1]["source_md"].endswith("doi:10.1093/bioinformatics/bty648")
 
 
+def test_plos_mixed_citation_label_names_and_single_doi():
+    xml = """
+    <ref id="r1"><label>1</label><mixed-citation publication-type="journal">
+    <name name-style="western"><surname>Knight</surname><given-names>R</given-names></name>,
+    <name name-style="western"><surname>Vrbanac</surname><given-names>A</given-names></name>.
+    <article-title>Best practices</article-title>. <source>Nat Rev Microbiol</source>.
+    <year>2018</year>;<volume>16</volume>:<fpage>410</fpage>–<lpage>22</lpage>.
+    <comment>doi: </comment><pub-id pub-id-type="doi">10.1038/s41579-018-0029-9</pub-id>
+    <pub-id pub-id-type="pmid">29795328</pub-id>
+    </mixed-citation></ref>
+    """
+    from defusedxml.ElementTree import fromstring
+
+    md = jd._ref_md(fromstring(xml))
+    assert md.startswith("1. Knight R, Vrbanac A.")
+    assert "doi: doi:" not in md
+    assert md.count("doi:10.1038/s41579-018-0029-9") == 1
+    assert "29795328" not in md
+    assert "KnightR" not in md
+
+
 def test_translatable_units_have_masked_text_and_spans(units):
     para = next(u for u in units if u["src_id"] == "Par2")
     assert "⟦C1⟧" in para["text"]
