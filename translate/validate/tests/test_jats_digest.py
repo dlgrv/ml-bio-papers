@@ -104,6 +104,27 @@ def test_plos_mixed_citation_label_names_and_single_doi():
     assert "KnightR" not in md
 
 
+def test_mixed_citation_keeps_doi_from_pub_id_not_empty_marker():
+    xml = """
+    <ref id="R1"><label>[1]</label>
+      <mixed-citation publication-type="journal">
+        <name name-style="western"><surname>Agustinho</surname><given-names>Daniel P.</given-names></name>.
+        <article-title>Unveiling microbial diversity</article-title>.
+        <source>Nature Methods</source>, <year>2024</year>. ISSN 1548–7105. doi:
+        <pub-id pub-id-type="doi">10.1038/s41592-024-02262-1</pub-id>.
+        URL <ext-link ext-link-type="uri">http://dx.doi.org/10.1038/s41592-024-02262-1</ext-link>.
+        <pub-id pub-id-type="pmid">38689099</pub-id>
+      </mixed-citation>
+    </ref>
+    """
+    from defusedxml.ElementTree import fromstring
+
+    md = jd._ref_md(fromstring(xml))
+    assert "doi: ." not in md
+    assert "doi:10.1038/s41592-024-02262-1" in md
+    assert md.count("doi:10.1038/s41592-024-02262-1") == 1
+
+
 def test_citation_alternatives_prefers_mixed_citation_body():
     xml = """
     <ref id="CR9"><label>9.</label>
