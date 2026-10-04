@@ -128,6 +128,26 @@ def test_citations_link_to_reference_anchors(tmp_path):
     assert 'href="#ref-9"' not in page
 
 
+def test_reference_dois_link_to_doi_org(tmp_path):
+    _paper(tmp_path, "2019-a")
+    (tmp_path / "papers" / "2019-a" / "index.md").write_text(
+        "# Заголовок\n\n"
+        "## Раздел\n\n"
+        "See [1].\n\n"
+        "## Список литературы\n\n"
+        "1. Author. Title. doi:10.1038/s41579-018-0029-9\n"
+        '2. Other. Already <a href="https://example.org/keep">linked</a>.\n',
+        encoding="utf-8",
+    )
+    build_site.build(tmp_path, tmp_path / "out")
+    page = (tmp_path / "out" / "2019-a" / "index.html").read_text(encoding="utf-8")
+    assert (
+        'href="https://doi.org/10.1038/s41579-018-0029-9">doi:10.1038/s41579-018-0029-9</a>' in page
+    )
+    assert 'href="https://example.org/keep">linked</a>' in page
+    assert page.count("https://doi.org/10.1038/s41579-018-0029-9") == 1
+
+
 def test_titles_are_html_escaped(tmp_path):
     _paper(tmp_path, "2019-a")
     (tmp_path / "papers" / "2019-a" / "index.md").write_text(

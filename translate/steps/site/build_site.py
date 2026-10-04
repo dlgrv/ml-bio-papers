@@ -16,11 +16,15 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import yaml
 
 from translate.lib.config import default_root
 from translate.lib.paths import check_slug
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 SITE_TITLE = "ml-bio-papers"
 REPO_URL = "https://github.com/dlgrv/ml-bio-papers"
@@ -134,6 +138,7 @@ CITE_GROUP_RE = re.compile(r"\[(\d+(?:\s*[,–-]\s*\d+)*)\]")
 SUP_CITE_RE = re.compile(r"<sup>(\d+(?:\s*[,–-]\s*\d+)*)</sup>")
 CITE_NUM_RE = re.compile(r"\d+")
 A_TAG_RE = re.compile(r"<a\b[^>]*>.*?</a>", re.DOTALL | re.IGNORECASE)
+DOI_TOKEN_RE = re.compile(r"doi:(10\.\d+/[^\s<]+)", re.IGNORECASE)
 
 
 def split_note(md: str) -> tuple[str, str]:
@@ -143,6 +148,17 @@ def split_note(md: str) -> tuple[str, str]:
     while n < len(lines) and lines[n].startswith(">"):
         n += 1
     return "\n".join(x.lstrip("> ").rstrip() for x in lines[:n]), "\n".join(lines[n:]).lstrip("\n")
+
+
+def map_outside_a_tags(html: str, transform: Callable[[str], str]) -> str:
+    parts: list[str] = []
+    last = 0
+    for m in A_TAG_RE.finditer(html):
+        parts.append(transform(html[last : m.start()]))
+        parts.append(m.group(0))
+        last = m.end()
+    parts.append(transform(html[last:]))
+    return "".join(parts)
 
 
 def anchor_references(body: str) -> str:
@@ -171,21 +187,28 @@ def _link_cite_nums(inner: str) -> str:
     )
 
 
-def _linkify_segment(text: str) -> str:
+def _linkify_cites(text: str) -> str:
     text = CITE_GROUP_RE.sub(lambda m: "[" + _link_cite_nums(m.group(1)) + "]", text)
     return SUP_CITE_RE.sub(lambda m: "<sup>" + _link_cite_nums(m.group(1)) + "</sup>", text)
 
 
 def link_citations(body: str) -> str:
     """Wrap in-text [n]/[n,m]/[n–m] and numeric <sup>…</sup> as links to #ref-N."""
-    parts: list[str] = []
-    last = 0
-    for m in A_TAG_RE.finditer(body):
-        parts.append(_linkify_segment(body[last : m.start()]))
-        parts.append(m.group(0))
-        last = m.end()
-    parts.append(_linkify_segment(body[last:]))
-    return "".join(parts)
+    return map_outside_a_tags(body, _linkify_cites)
+
+
+def _link_doi_token(text: str) -> str:
+    return DOI_TOKEN_RE.sub(
+        lambda m: f'<a href="https://doi.org/{m.group(1)}">doi:{m.group(1)}</a>',
+        text,
+    )
+
+
+def link_reference_dois(body: str) -> str:
+    def on_ol(m: re.Match[str]) -> str:
+        return m.group(1) + map_outside_a_tags(m.group(2), _link_doi_token) + m.group(3)
+
+    return REFS_OL_RE.sub(on_ol, body)
 
 
 def decorate(body: str) -> str:
@@ -205,6 +228,7 @@ def decorate(body: str) -> str:
     body = FIG_CAPTION_ONLY_RE.sub(wrap_caption, body)
     body = OL_RE.sub(r'\1<ol class="references">', body)
     body = anchor_references(body)
+    body = link_reference_dois(body)
     return link_citations(body)
 
 
