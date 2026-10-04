@@ -181,7 +181,7 @@ def test_site_paper_css_keeps_reading_measure(tmp_path):
     assert "65ch" in css
     assert "margin-inline: auto" in css
     assert "a.cite" in css
-    assert "li:target" in css
+    assert "scroll-margin-top" in css
 
 
 def test_site_html_has_img_src_assets(tmp_path):
