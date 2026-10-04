@@ -61,6 +61,18 @@ def test_citation_list_with_commas():
     assert len(spans) == 1
 
 
+def test_consecutive_citation_groups_do_not_double_brackets():
+    inner = (
+        'samples [<xref ref-type="bibr" rid="CR25">25</xref>]. '
+        'However planet [<xref ref-type="bibr" rid="CR5">5</xref>]; '
+        'Kraken [<xref ref-type="bibr" rid="CR6">6</xref>, '
+        '<xref ref-type="bibr" rid="CR25">25</xref>].'
+    )
+    text, spans = run(inner)
+    assert mask.unmask(text, spans) == ("samples [25]. However planet [5]; Kraken [6, 25].")
+    assert "[[" not in mask.unmask(text, spans)
+
+
 def test_superscript_bibr_normalizes_to_brackets():
     text, spans = run('<sup><xref ref-type="bibr" rid="CR1">1</xref></sup>')
     assert text == "⟦C1⟧"
