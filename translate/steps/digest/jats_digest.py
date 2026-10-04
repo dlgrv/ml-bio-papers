@@ -47,6 +47,7 @@ class _Digest:
     def __init__(self, protected: dict):
         self.protected = protected
         self.units: list[dict] = []
+        self._seen_fig_ids: set[str] = set()
 
     def add(self, kind: str, **fields) -> dict:
         unit = {
@@ -86,11 +87,16 @@ class _Digest:
             self.text_unit("heading", title, level=level, src_id=src_id)
 
     def figure(self, fig: ET.Element) -> None:
+        fid = fig.get("id")
+        if fid and fid in self._seen_fig_ids:
+            return
         label = "".join(fig.findtext("label") or "").strip()
         caption = fig.find("caption")
         graphics = _graphic_hrefs(fig)
         if caption is not None:
-            self.text_unit("figure", caption, src_id=fig.get("id"), label=label, graphics=graphics)
+            if fid:
+                self._seen_fig_ids.add(fid)
+            self.text_unit("figure", caption, src_id=fid, label=label, graphics=graphics)
 
     def supplementary(self, sup: ET.Element) -> None:
         caption = sup.find(".//caption")
@@ -114,6 +120,9 @@ class _Digest:
             self.para(el)
         elif el.tag in CONTAINERS:
             self.container(el, level)
+        elif el.tag == "floats-group":
+            for ch in el:
+                self.block(ch, level)
         elif el.tag == "fig":
             self.figure(el)
         elif el.tag == "supplementary-material":
@@ -232,6 +241,9 @@ def digest(xml_text: str, protected: dict) -> list[dict]:
                 d.references(ch)
             else:
                 d.block(ch, 2)
+    for ch in article:
+        if ch.tag == "floats-group":
+            d.block(ch, 2)
     return d.units
 
 

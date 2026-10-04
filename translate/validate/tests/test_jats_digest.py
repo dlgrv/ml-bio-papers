@@ -5,6 +5,7 @@ import pytest
 from translate.steps.digest import jats_digest as jd
 
 FIXTURE = Path(__file__).parent / "fixtures" / "mini_article.xml"
+FLOATS_FIXTURE = Path(__file__).parent / "fixtures" / "floats_group_article.xml"
 PROTECTED = {"terms": ["Kraken", "Kraken2"], "patterns": []}
 
 
@@ -131,3 +132,44 @@ def test_every_paragraph_is_covered_exactly_once(units):
     src = [u["src_id"] for u in units if u["kind"] == "para"]
     assert len(src) == len(set(src))
     assert {"Par1", "Par2", "Par3", "Par4", "Par5"} <= set(src)
+
+
+def test_floats_group_figure_at_article_level():
+    units = jd.digest(FLOATS_FIXTURE.read_text(encoding="utf-8"), PROTECTED)
+    figs = [u for u in units if u["kind"] == "figure"]
+    assert len(figs) == 1
+    fig = figs[0]
+    assert fig["label"].startswith(("Figure", "Fig"))
+    assert fig["graphics"] == ["nihpp-demo-f0001.jpg"]
+    assert "Feature encoding" in fig["text"]
+    para_idx = next(i for i, u in enumerate(units) if u["kind"] == "para")
+    fig_idx = next(i for i, u in enumerate(units) if u["kind"] == "figure")
+    assert fig_idx > para_idx
+
+
+def test_floats_group_dedupes_inline_and_floats():
+    xml = """
+    <article xmlns:xlink="http://www.w3.org/1999/xlink">
+      <body>
+        <sec>
+          <p id="Par1">See the panel below.
+            <fig id="F1" position="float">
+              <label>Fig. 1</label>
+              <caption><p>Shared caption.</p></caption>
+              <graphic xlink:href="nihpp-demo-f0001.jpg"/>
+            </fig>
+          </p>
+        </sec>
+      </body>
+      <floats-group>
+        <fig id="F1" position="float">
+          <label>Figure 1:</label>
+          <caption><p>Shared caption.</p></caption>
+          <graphic xlink:href="nihpp-demo-f0001.jpg"/>
+        </fig>
+      </floats-group>
+    </article>
+    """
+    units = jd.digest(xml, PROTECTED)
+    figs = [u for u in units if u["kind"] == "figure"]
+    assert len(figs) == 1

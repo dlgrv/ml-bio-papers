@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<article xmlns:xlink="http://www.w3.org/1999/xlink" article-type="research-article" xml:lang="en">
+  <front>
+    <article-meta>
+      <title-group>
+        <article-title>Floats title</article-title>
+      </title-group>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="Sec1">
+      <p id="Par1">The model architecture is summarized in <xref ref-type="fig" rid="F1">Figure 1</xref>.</p>
+    </sec>
+  </body>
+  <back>
+    <ref-list id="Bib1">
+      <title>References</title>
+    </ref-list>
+  </back>
+  <floats-group>
+    <fig id="F1" position="float">
+      <label>Figure 1:</label>
+      <caption>
+        <p>Feature encoding diagram.</p>
+      </caption>
+      <graphic xlink:href="nihpp-demo-f0001.jpg"/>
+    </fig>
+  </floats-group>
+</article>
