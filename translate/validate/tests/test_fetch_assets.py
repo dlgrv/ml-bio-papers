@@ -58,12 +58,38 @@ def test_is_image_bytes_jpeg_and_rejects_html():
 
 def test_resolve_graphic_urls_from_article_html():
     html = f'<html><img src="{CDN}"/></html>'.encode()
-    dl = mock.Mock(return_value=html)
+
+    def dl(url: str) -> bytes:
+        if url.rstrip("/") == ARTICLE.rstrip("/"):
+            return html
+        if url == CDN:
+            return JPEG
+        raise OSError(url)
+
     got = pmc_media.resolve_graphic_urls(
         "PMC6883579", ["13059_2019_1891_Fig1_HTML.jpg"], download=dl
     )
     assert got == {"13059_2019_1891_Fig1_HTML.jpg": CDN}
-    dl.assert_called_once_with(ARTICLE)
+
+
+def test_fetch_assets_writes_largest_candidate(tmp_path):
+    orig = CDN.replace("_HTML.jpg", ".jpg")
+    large = b"\xff\xd8\xff" + b"L" * 400
+    html = f'<img src="{CDN}"/><a href="{orig}">hi</a>'.encode()
+
+    def dl(url: str) -> bytes:
+        if url.rstrip("/") == ARTICLE.rstrip("/"):
+            return html
+        if url == CDN:
+            return JPEG
+        if url == orig:
+            return large
+        raise OSError(url)
+
+    assets = _layout(tmp_path)
+    assert fa.fetch_assets("2019-kraken2", root=str(tmp_path), download=dl) == 0
+    dest = assets / "13059_2019_1891_Fig1_HTML.jpg"
+    assert dest.read_bytes() == large
 
 
 def test_fetch_assets_downloads_graphics(tmp_path):
@@ -82,9 +108,19 @@ def test_fetch_assets_skips_existing_image(tmp_path):
     dest = assets / "13059_2019_1891_Fig1_HTML.jpg"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_bytes(JPEG)
-    dl = mock.Mock(side_effect=AssertionError("should not download"))
+    n_image = {"n": 0}
+
+    def dl(url: str) -> bytes:
+        if url.rstrip("/") == ARTICLE.rstrip("/"):
+            return f'<img src="{CDN}"/>'.encode()
+        if url == CDN:
+            n_image["n"] += 1
+            return JPEG
+        raise OSError(url)
+
     assert fa.fetch_assets("2019-kraken2", root=str(tmp_path), download=dl) == 0
     assert dest.read_bytes() == JPEG
+    assert n_image["n"] == 1
 
 
 def test_fetch_assets_redownloads_html_placeholder(tmp_path):

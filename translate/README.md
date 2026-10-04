@@ -33,7 +33,7 @@ Or: `python -m translate.run <slug> [--from STEP]`.
 
 `fetch → digest → assets → translate → render → verify → repair → verify_final → publish → site`
 
-- **assets:** PMC figure binaries → `papers/<slug>/assets/` via `translate.lib.pmc_media` (CDN URLs from the article HTML) + `translate.lib.http.download`; rejects non-image payloads.
+- **assets:** PMC figure binaries → `papers/<slug>/assets/` via `translate.lib.pmc_media` (CDN URLs from the article HTML). When PMC also links a larger original next to `*_HTML.jpg`, that raster is stored under the JATS basename. Rejects non-image payloads.
 - **repair:** ≤2 automated rounds per unit, then escalate to `python -m translate.steps.fix.fix_unit <slug> <unit_id>` (human or driving agent). No endless auto-loop.
 - **verify_final** sets the process exit code (0 / 1 FAIL / 2 WARN).
 
