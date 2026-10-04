@@ -104,6 +104,58 @@ def test_plos_mixed_citation_label_names_and_single_doi():
     assert "KnightR" not in md
 
 
+def test_citation_alternatives_prefers_mixed_citation_body():
+    xml = """
+    <ref id="CR9"><label>9.</label>
+      <citation-alternatives>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name name-style="western"><surname>Albertsen</surname><given-names>M</given-names></name>
+            <etal/>
+          </person-group>
+          <article-title>Genome sequences of rare bacteria</article-title>
+          <source>Nat. Biotechnol.</source>
+          <year>2013</year>
+          <volume>31</volume>
+          <fpage>533</fpage>
+          <lpage>538</lpage>
+          <pub-id pub-id-type="doi">10.1038/nbt.2579</pub-id>
+        </element-citation>
+        <mixed-citation publication-type="journal">Albertsen, M. et al. Genome sequences of rare bacteria.
+          <italic>Nat. Biotechnol.</italic><bold>31</bold>, 533–538 (2013).
+          <pub-id pub-id-type="doi">10.1038/nbt.2579</pub-id>
+        </mixed-citation>
+      </citation-alternatives>
+    </ref>
+    """
+    from defusedxml.ElementTree import fromstring
+
+    md = jd._ref_md(fromstring(xml))
+    assert md.startswith("9. Albertsen, M. et al.")
+    assert "Nat. Biotechnol." in md
+    assert "doi:10.1038/nbt.2579" in md
+    assert md != "9."
+
+    xml = """
+    <ref id="r1"><label>1</label><mixed-citation publication-type="journal">
+    <name name-style="western"><surname>Knight</surname><given-names>R</given-names></name>,
+    <name name-style="western"><surname>Vrbanac</surname><given-names>A</given-names></name>.
+    <article-title>Best practices</article-title>. <source>Nat Rev Microbiol</source>.
+    <year>2018</year>;<volume>16</volume>:<fpage>410</fpage>–<lpage>22</lpage>.
+    <comment>doi: </comment><pub-id pub-id-type="doi">10.1038/s41579-018-0029-9</pub-id>
+    <pub-id pub-id-type="pmid">29795328</pub-id>
+    </mixed-citation></ref>
+    """
+    from defusedxml.ElementTree import fromstring
+
+    md = jd._ref_md(fromstring(xml))
+    assert md.startswith("1. Knight R, Vrbanac A.")
+    assert "doi: doi:" not in md
+    assert md.count("doi:10.1038/s41579-018-0029-9") == 1
+    assert "29795328" not in md
+    assert "KnightR" not in md
+
+
 def test_translatable_units_have_masked_text_and_spans(units):
     para = next(u for u in units if u["src_id"] == "Par2")
     assert "⟦C1⟧" in para["text"]
