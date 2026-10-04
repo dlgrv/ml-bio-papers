@@ -105,7 +105,7 @@ def test_citations_link_to_reference_anchors(tmp_path):
     (tmp_path / "papers" / "2019-a" / "index.md").write_text(
         "# Заголовок\n\n"
         "## Раздел\n\n"
-        "See [1] and [2, 3] plus [4–6] and <sup>7</sup> "
+        "See [1] and [2, 3] plus [4–6] and [7] "
         "and [SGB](https://example.com/x) and "
         '<a href="https://doi.org/10.1/x">doi [9]</a>.\n\n'
         "## Список литературы\n\n"

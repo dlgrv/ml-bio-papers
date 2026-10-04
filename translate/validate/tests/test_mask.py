@@ -61,6 +61,40 @@ def test_citation_list_with_commas():
     assert len(spans) == 1
 
 
+def test_superscript_bibr_normalizes_to_brackets():
+    text, spans = run('<sup><xref ref-type="bibr" rid="CR1">1</xref></sup>')
+    assert text == "⟦C1⟧"
+    assert mask.unmask(text, spans) == "[1]"
+
+
+def test_superscript_bibr_range_and_list():
+    rang = (
+        '<sup><xref ref-type="bibr" rid="CR2">2</xref>–'
+        '<xref ref-type="bibr" rid="CR6">6</xref></sup>'
+    )
+    text, spans = run(rang)
+    assert mask.unmask(text, spans) == "[2–6]"
+    lst = (
+        '<sup><xref ref-type="bibr" rid="CR4">4</xref>,'
+        '<xref ref-type="bibr" rid="CR7">7</xref>,'
+        '<xref ref-type="bibr" rid="CR8">8</xref></sup>'
+    )
+    text, spans = run(lst)
+    assert mask.unmask(text, spans) == "[4,7,8]"
+
+
+def test_lone_bibr_gets_brackets():
+    text, spans = run('see <xref ref-type="bibr" rid="CR5">5</xref>.')
+    assert text == "see ⟦C1⟧."
+    assert mask.unmask(text, spans) == "see [5]."
+
+
+def test_non_citation_sup_stays_sup():
+    text, spans = run("10<sup>−3</sup>")
+    assert text == "10⟦U1⟧"
+    assert mask.unmask(text, spans) == "10<sup>−3</sup>"
+
+
 def test_figure_media_xrefs_keep_their_number():
     inner = '(Fig. <xref rid="Fig1" ref-type="fig">1</xref>a, Additional file <xref rid="M1" ref-type="media">1</xref>)'
     text, spans = run(inner)
@@ -124,6 +158,7 @@ def test_thin_and_nbsp_whitespace_preserved():
         'a <italic toggle="yes">k</italic>-mer [<xref ref-type="bibr" rid="C1">1</xref>] and <bold>b</bold>',
         '<italic>Escherichia coli</italic> (Fig. <xref rid="F" ref-type="fig">2</xref>)',
         "x<sub>1</sub> y<sup>2</sup> Kraken",
+        '<sup><xref ref-type="bibr" rid="CR1">1</xref></sup> and 10<sup>−3</sup>',
     ],
 )
 def test_round_trip_equals_direct_markdown(inner):
