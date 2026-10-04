@@ -118,7 +118,10 @@ def _citation_end(nodes: list, i: int) -> int | None:
     """If nodes[i:] is `bibr (sep bibr)* ]`, return the index of the closing text node."""
     j = i
     while j + 2 < len(nodes) and nodes[j + 1][0] == "t" and _is_bibr(nodes[j + 2]):
-        if not CITE_SEP_RE.fullmatch(nodes[j + 1][1]):
+        sep = nodes[j + 1][1]
+        if sep.startswith("]"):
+            return j + 1
+        if not CITE_SEP_RE.fullmatch(sep):
             return None
         j += 2
     if j + 1 < len(nodes) and nodes[j + 1][0] == "t" and nodes[j + 1][1].startswith("]"):
