@@ -1,8 +1,11 @@
-title: "2026-perseus"
-authors: []
-doi: ""
-journal: ""
-year:
-license: ""
-status: "not-started"
+title: "Perseus: Lineage-Aware Refinement of Kraken2 Taxonomic Classification for Long Read Metagenomes"
+authors:
+  - "Matthew H. Nguyen"
+  - "Michael C. Schatz"
+doi: "10.64898/2026.03.06.710148"
+pmcid: "PMC13001417"
+journal: "bioRxiv"
+year: 2026
+license: "CC BY-NC 4.0"
+status: "machine-translated"
 zenodo-doi: ""

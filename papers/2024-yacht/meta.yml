@@ -1,8 +1,13 @@
-title: "2024-yacht"
-authors: []
-doi: ""
-journal: ""
-year:
-license: ""
+title: "YACHT: an ANI-based statistical test to detect microbial presence/absence in a metagenomic sample"
+authors:
+  - "David Koslicki"
+  - "Stephen White"
+  - "Chunyu Ma"
+  - "Alexei Novikov"
+doi: "10.1093/bioinformatics/btae047"
+pmcid: "PMC10868342"
+journal: "Bioinformatics"
+year: 2024
+license: "CC BY 4.0"
 status: "not-started"
 zenodo-doi: ""
