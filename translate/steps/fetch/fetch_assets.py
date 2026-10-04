@@ -3,7 +3,10 @@
 
 Reads `pmcid` from papers/<slug>/meta.yml and graphic filenames from figure units in
 translate/runs/<slug>/units.json. Resolves real CDN URLs from the PMC article HTML
-(``translate.lib.pmc_media``). Skips files that already exist and look like images.
+(``translate.lib.pmc_media``). Prefers the largest raster PMC publishes for that
+figure (often the original next to ``*_HTML.jpg``). Rewrites a local file when
+the remote copy is larger.
+
 Usage: python -m translate.steps.fetch.fetch_assets <slug>
 """
 
@@ -19,11 +22,10 @@ import yaml
 from translate.lib.http import download as default_download
 from translate.lib.jsonio import read_json
 from translate.lib.paths import assets_dir, meta_yml, work_dir
-from translate.lib.pmc_media import is_image_bytes, resolve_graphic_urls
+from translate.lib.pmc_media import is_image_bytes, resolve_best_graphics
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from pathlib import Path
 
 _DOWNLOAD_ERRORS = (OSError, ValueError, urllib.error.URLError, urllib.error.HTTPError)
 
@@ -39,12 +41,6 @@ def collect_graphics(units: list) -> list[str]:
                 seen.add(name)
                 names.append(name)
     return names
-
-
-def _needs_download(dest: Path) -> bool:
-    if not dest.exists() or dest.stat().st_size == 0:
-        return True
-    return not is_image_bytes(dest.read_bytes()[:16])
 
 
 def fetch_assets(
@@ -65,28 +61,29 @@ def fetch_assets(
         return 0
     out_dir = assets_dir(slug, root)
     out_dir.mkdir(parents=True, exist_ok=True)
-    pending = [name for name in graphics if _needs_download(out_dir / name)]
-    if not pending:
-        return 0
     try:
-        urls = resolve_graphic_urls(str(pmcid), pending, download=dl)
+        best = resolve_best_graphics(str(pmcid), graphics, download=dl)
     except _DOWNLOAD_ERRORS as e:
         print(f"{slug}: resolve PMC media failed: {e}", file=sys.stderr)
         return 1
-    for filename in pending:
-        url = urls.get(filename)
-        if not url:
+    for filename in graphics:
+        picked = best.get(filename)
+        dest = out_dir / filename
+        if not picked:
+            if dest.exists() and is_image_bytes(dest.read_bytes()[:16]):
+                continue
             print(f"{slug}: no CDN URL for {filename}", file=sys.stderr)
             return 1
-        try:
-            data = dl(url)
-        except _DOWNLOAD_ERRORS as e:
-            print(f"{slug}: download failed {filename}: {e}", file=sys.stderr)
-            return 1
+        url, data = picked
         if not is_image_bytes(data):
             print(f"{slug}: not an image: {filename} from {url}", file=sys.stderr)
             return 1
-        dest = out_dir / filename
+        if (
+            dest.exists()
+            and dest.stat().st_size >= len(data)
+            and is_image_bytes(dest.read_bytes()[:16])
+        ):
+            continue
         tmp = dest.with_name(dest.name + ".tmp")
         tmp.write_bytes(data)
         os.replace(tmp, dest)
