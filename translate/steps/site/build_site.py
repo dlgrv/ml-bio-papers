@@ -135,7 +135,6 @@ OL_RE = re.compile(r"(<h2>Список литературы</h2>\s*)<ol[^>]*>")
 REFS_OL_RE = re.compile(r'(<ol class="references">)(.*?)(</ol>)', re.DOTALL)
 LI_OPEN_RE = re.compile(r"<li\b([^>]*)>", re.IGNORECASE)
 CITE_GROUP_RE = re.compile(r"\[(\d+(?:\s*[,–-]\s*\d+)*)\]")
-SUP_CITE_RE = re.compile(r"<sup>(\d+(?:\s*[,–-]\s*\d+)*)</sup>")
 CITE_NUM_RE = re.compile(r"\d+")
 A_TAG_RE = re.compile(r"<a\b[^>]*>.*?</a>", re.DOTALL | re.IGNORECASE)
 DOI_TOKEN_RE = re.compile(r"doi:(10\.\d+/[^\s<]+)", re.IGNORECASE)
@@ -188,12 +187,11 @@ def _link_cite_nums(inner: str) -> str:
 
 
 def _linkify_cites(text: str) -> str:
-    text = CITE_GROUP_RE.sub(lambda m: "[" + _link_cite_nums(m.group(1)) + "]", text)
-    return SUP_CITE_RE.sub(lambda m: "<sup>" + _link_cite_nums(m.group(1)) + "</sup>", text)
+    return CITE_GROUP_RE.sub(lambda m: "[" + _link_cite_nums(m.group(1)) + "]", text)
 
 
 def link_citations(body: str) -> str:
-    """Wrap in-text [n]/[n,m]/[n–m] and numeric <sup>…</sup> as links to #ref-N."""
+    """Wrap in-text [n]/[n,m]/[n–m] as links to #ref-N."""
     return map_outside_a_tags(body, _linkify_cites)
 
 

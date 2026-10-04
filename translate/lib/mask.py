@@ -126,6 +126,26 @@ def _citation_end(nodes: list, i: int) -> int | None:
     return None
 
 
+def _citation_md(nodes: list) -> str:
+    inner = "".join(_norm(v if k == "t" else "".join(v.itertext())) for k, v in nodes)
+    return f"[{inner}]"
+
+
+def _is_citation_sup(el: ET.Element) -> bool:
+    nodes = _flat(el)
+    if not nodes:
+        return False
+    saw_bibr = False
+    for kind, val in nodes:
+        if kind == "e":
+            if not _is_bibr(("e", val)):
+                return False
+            saw_bibr = True
+        elif not CITE_SEP_RE.fullmatch(val):
+            return False
+    return saw_bibr
+
+
 def _render_children(el: ET.Element, ctx: _Ctx) -> str:
     nodes = _flat(el)
     out: list[str] = []
@@ -138,15 +158,7 @@ def _render_children(el: ET.Element, ctx: _Ctx) -> str:
             if end is not None:
                 before = val.rstrip()[:-1]
                 out.append(_plain_text(ctx, before))
-                md = (
-                    "["
-                    + "".join(
-                        _norm(v if k == "t" else "".join(v.itertext()))
-                        for k, v in nodes[i + 1 : end]
-                    )
-                    + "]"
-                )
-                out.append(ctx.atom("C", md))
+                out.append(ctx.atom("C", _citation_md(nodes[i + 1 : end])))
                 nodes[end] = ("t", nodes[end][1][1:])
                 i = end
                 continue
@@ -163,6 +175,8 @@ def _render_element(el: ET.Element, ctx: _Ctx) -> str:
         return ""
     if tag in {"disp-formula", "inline-formula"}:
         return ctx.atom("M", _formula_md(el))
+    if tag == "sup" and _is_citation_sup(el):
+        return ctx.atom("C", _citation_md(_flat(el)))
     if tag in {"sub", "sup"}:
         plain = _Ctx({}, masking=False)
         return ctx.atom("U", f"<{tag}>{_render_children(el, plain)}</{tag}>")
@@ -174,7 +188,9 @@ def _render_element(el: ET.Element, ctx: _Ctx) -> str:
         text = _norm("".join(el.itertext()))
         if el.get("ref-type") == "sec":
             return ctx.atom("R", text, rid=el.get("rid"))
-        return ctx.atom("C" if el.get("ref-type") == "bibr" else "F", text)
+        if el.get("ref-type") == "bibr":
+            return ctx.atom("C", f"[{text}]")
+        return ctx.atom("F", text)
     if tag == "italic":
         text = "".join(el.itertext()).strip()
         if len(text) <= 3 and " " not in text:
