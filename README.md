@@ -32,7 +32,7 @@ Every translation states its original source (DOI), the license it is made under
 | 2024 | Taxometer | Nature Communications | [10.1038/s41467-024-52771-y](https://doi.org/10.1038/s41467-024-52771-y) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC11437175/) | CC BY 4.0 | — |
 | 2024 | YACHT | Bioinformatics | [10.1093/bioinformatics/btae047](https://doi.org/10.1093/bioinformatics/btae047) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC10868342/) | CC BY 4.0 | — |
 | 2026 | Perseus | preprint | [PMC13001417](https://pmc.ncbi.nlm.nih.gov/articles/PMC13001417/) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC13001417/) | CC BY-NC 4.0 | — |
-| 2026 | Kraken2 vs MetaPhlAn4 comparison | PLOS Computational Biology | [10.1371/journal.pcbi.1013883](https://doi.org/10.1371/journal.pcbi.1013883) | [PLOS](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013883) | CC BY 4.0 | — |
+| 2026 | Kraken2 vs MetaPhlAn4 comparison | PLOS Computational Biology | [10.1371/journal.pcbi.1013883](https://doi.org/10.1371/journal.pcbi.1013883) | [PLOS](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013883) | CC BY 4.0 | machine-translated |
 
 Full PDF/HTML originals are NOT copied into this repository — each translation links the original above and in its header. Open-access figure and formula binaries from PMC may be stored under `papers/<slug>/assets/` (same license as the original, attributed in the paper header).
 
