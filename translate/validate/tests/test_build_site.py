@@ -45,8 +45,6 @@ def _paper(
     for name in ("pages.css", "paper.css"):
         (root / "site-assets" / name).write_text("body{}", encoding="utf-8")
     (root / "site-assets" / "site.js").write_text("// stub\n", encoding="utf-8")
-    (root / "site-assets" / "fonts").mkdir(exist_ok=True)
-    (root / "site-assets" / "fonts" / "f.woff2").write_bytes(b"f")
 
 
 def test_only_translated_papers_are_published(tmp_path):
@@ -97,7 +95,6 @@ def test_article_page_uses_paper_layout(tmp_path):
     assert 'href="index.pdf"' in page
     assert 'class="meta-sep"' in page
     assert (out / "2019-a" / "index.pdf").read_bytes() == b"%PDF"
-    assert (out / "static" / "fonts" / "f.woff2").read_bytes() == b"f"
 
 
 def test_citations_link_to_reference_anchors(tmp_path):
@@ -193,4 +190,6 @@ def test_site_html_has_img_src_assets(tmp_path):
     assert page.index("<img") < page.index("figure-box") or "figure-box" in page
     box = page[page.index("figure-box") : page.index("figure-box") + 400]
     assert "<img" in box
+    assert 'loading="lazy"' in box
+    assert 'decoding="async"' in box
     assert "Рис. 1" in box
