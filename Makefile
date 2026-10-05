@@ -1,4 +1,4 @@
-# ml-bio-papers translation pipeline. Run from repo root.
+# ml-papers translation pipeline. Run from repo root.
 # After clone: python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt && make hooks
 export PYTHONPATH := $(CURDIR)
 PY = .venv/bin/python3
@@ -20,7 +20,8 @@ format:  ## Autofix Python (ruff format + check --fix)
 lint:  ## All linters (must match CI and pre-commit)
 	$(RUFF) format --check translate
 	$(RUFF) check translate
-	$(YAMLLINT) .github/workflows/ papers/*/meta.yml
+	$(YAMLLINT) .github/workflows/ papers/*/meta.yml topics.yml
+	$(PY) -m translate.ops.validate_topics
 	shellcheck translate/steps/translate/*.sh
 
 ci:  ## Local gate ≈ pre-push / GitHub (lint + test)

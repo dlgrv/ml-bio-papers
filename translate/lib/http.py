@@ -7,7 +7,7 @@ import urllib.error
 import urllib.request
 
 MIN_INTERVAL_S = 0.34  # NCBI: ≤3 req/s without an API key
-USER_AGENT = "ml-bio-papers/0.1 (translation pipeline)"
+USER_AGENT = "ml-papers/0.1 (translation pipeline)"
 _last_request = 0.0
 
 

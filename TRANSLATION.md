@@ -47,6 +47,10 @@ Minimal attribution only (no PMC/`assets/` notes, no MT status):
 > **Неофициальный перевод.** Оригинал: {authors}. «{title}». {journal}, {year}. DOI: [{doi}](https://doi.org/{doi}). Лицензия: {license}.
 ```
 
+## Topics
+
+Every `papers/<slug>/meta.yml` must set `topics` from the allowlist in [`topics.yml`](topics.yml). Prefer a focused set (about four or fewer); more is allowed when genuinely needed. Add a new topic to `topics.yml` in the same PR that first uses it.
+
 ## Style
 
 - Readability over calque.

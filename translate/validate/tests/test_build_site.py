@@ -12,6 +12,7 @@ META = {
     "journal": "J",
     "year": 2019,
     "status": "machine-translated",
+    "topics": ["metagenomics"],
 }
 
 
@@ -22,10 +23,14 @@ def _paper(
     pdf: bool = False,
     *,
     with_asset: bool = False,
+    topics: list[str] | None = None,
 ) -> None:
     d = root / "papers" / slug
     d.mkdir(parents=True)
-    (d / "meta.yml").write_text(yaml.safe_dump({**META, "status": status}), encoding="utf-8")
+    meta = {**META, "status": status}
+    if topics is not None:
+        meta["topics"] = topics
+    (d / "meta.yml").write_text(yaml.safe_dump(meta), encoding="utf-8")
     fig = (
         "![Рис. 1](assets/fig1.jpg)\n\n**Рис. 1.** Подпись.\n\n"
         if with_asset
@@ -70,8 +75,17 @@ def test_index_lists_paper_with_relative_link(tmp_path):
     assert build_site.REPO_URL in idx
     assert 'src="static/site.js"' in idx
     assert 'data-slug="2019-a"' in idx
+    assert 'class="blog-index__meta"' in idx
+    assert 'class="blog-index__topics"' not in idx
+    assert 'class="topic-chip">metagenomics</span>' in idx
+    # Topics sit inside the meta line with authors/journal.
+    meta_start = idx.index('class="blog-index__meta"')
+    excerpt_start = idx.index('class="blog-index__excerpt"', meta_start)
+    assert 'class="topic-chip">metagenomics</span>' in idx[meta_start:excerpt_start]
     search = (tmp_path / "out" / "static" / "search.json").read_text(encoding="utf-8")
     assert "2019-a" in search
+    assert '"topics"' in search
+    assert "metagenomics" in search
     assert (tmp_path / "out" / "static" / "site.js").read_text(encoding="utf-8") == "// stub\n"
 
 
@@ -94,7 +108,27 @@ def test_article_page_uses_paper_layout(tmp_path):
     assert "плашка" in page
     assert 'href="index.pdf"' in page
     assert 'class="meta-sep"' in page
+    assert 'class="paper-topics"' not in page
+    assert 'class="topic-chip">metagenomics</span>' in page
+    addr_start = page.index("<address>")
+    addr_end = page.index("</address>", addr_start)
+    assert 'class="topic-chip">metagenomics</span>' in page[addr_start:addr_end]
     assert (out / "2019-a" / "index.pdf").read_bytes() == b"%PDF"
+
+
+def test_multi_topics_on_index_and_search(tmp_path):
+    _paper(tmp_path, "2019-a", topics=["llm", "prompting", "rag"])
+    build_site.build(tmp_path, tmp_path / "out")
+    idx = (tmp_path / "out" / "index.html").read_text(encoding="utf-8")
+    meta_start = idx.index('class="blog-index__meta"')
+    excerpt_start = idx.index('class="blog-index__excerpt"', meta_start)
+    meta = idx[meta_start:excerpt_start]
+    for t in ("llm", "prompting", "rag"):
+        assert f'class="topic-chip">{t}</span>' in meta
+    search = (tmp_path / "out" / "static" / "search.json").read_text(encoding="utf-8")
+    assert '"llm"' in search
+    assert '"prompting"' in search
+    assert '"rag"' in search
 
 
 def test_citations_link_to_reference_anchors(tmp_path):

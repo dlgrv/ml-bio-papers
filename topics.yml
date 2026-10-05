@@ -1,0 +1,11 @@
+# Controlled allowlist for papers/*/meta.yml → topics.
+# Add new topics here first; unknown values fail make lint.
+topics:
+  - metagenomics
+  - transformers
+  - retrieval
+  - llm
+  - prompting
+  - rag
+  - dialogue
+  - agents

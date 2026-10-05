@@ -26,9 +26,11 @@ from translate.lib.paths import check_slug
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-SITE_TITLE = "ml-bio-papers"
-REPO_URL = "https://github.com/dlgrv/ml-bio-papers"
+SITE_TITLE = "ml-papers"
+REPO_URL = "https://github.com/dlgrv/ml-papers"
 UNPUBLISHED = "not-started"
+# Byline/meta field separator: middot is the publishing-industry default.
+META_SEP = " · "
 TAG_RE = re.compile(r"<[^>]+>")
 
 _GH_SVG = (
@@ -75,6 +77,19 @@ class Paper:
     @property
     def authors(self) -> str:
         return ", ".join(self.meta.get("authors") or [])
+
+    @property
+    def topics(self) -> list[str]:
+        raw = self.meta.get("topics") or []
+        return [t for t in raw if isinstance(t, str) and t]
+
+
+def topics_suffix(topics: list[str]) -> str:
+    """Inline topic chips for meta lines (empty if no topics)."""
+    if not topics:
+        return ""
+    chips = META_SEP.join(f'<span class="topic-chip">{html.escape(t)}</span>' for t in topics)
+    return f"{META_SEP}{chips}"
 
 
 def load_papers(root: Path) -> list[Paper]:
@@ -291,13 +306,13 @@ def render_index(papers: list[Paper]) -> str:
         f"""
           <li data-slug="{html.escape(p.slug)}">
             <a class="paper-link" href="{p.slug}/">{html.escape(p.title_ru)}</a>
-            <div class="blog-index__meta">{html.escape(p.authors)} · {html.escape(str(p.meta.get("journal", "")))}, {p.meta.get("year", "")}</div>
+            <div class="blog-index__meta">{html.escape(p.authors)}{META_SEP}{html.escape(str(p.meta.get("journal", "")))}, {p.meta.get("year", "")}{topics_suffix(p.topics)}</div>
             <p class="blog-index__excerpt">{html.escape(p.meta["title"])}</p>
           </li>"""
         for p in papers
     )
     lead = (
-        "<p>Неофициальные переводы научных статей по метагеномике и биоинформатике. "
+        "<p>Неофициальные переводы научных статей по машинному обучению. "
         "Переводы машинные, со сверкой по скрипту.</p>"
     )
     article = f"""      <article class="tl_article">
@@ -306,7 +321,7 @@ def render_index(papers: list[Paper]) -> str:
         </ul>
       </article>"""
     return shell(
-        "Papers — ml-bio-papers", "Переводы научных статей по метагеномике.", article, depth=0
+        "Papers | ml-papers", "Переводы научных статей по машинному обучению.", article, depth=0
     )
 
 
@@ -321,11 +336,15 @@ def render_article(p: Paper) -> str:
     if p.has_pdf:
         links.append('<a href="index.pdf">PDF</a>')
     links.append(f'<a href="{REPO_URL}/blob/main/papers/{p.slug}/index.md">Markdown</a>')
-    sep = '<span class="meta-sep" aria-hidden="true">·</span>'
+    sep = f'<span class="meta-sep" aria-hidden="true">{META_SEP.strip()}</span>'
     info = [
         html.escape(p.authors),
         f"{html.escape(str(p.meta.get('journal', '')))}, {p.meta.get('year', '')}",
     ]
+    if p.topics:
+        info.append(
+            META_SEP.join(f'<span class="topic-chip">{html.escape(t)}</span>' for t in p.topics)
+        )
     meta_line = (
         "".join(f"<span>{x}</span>" for x in info)
         + f'<span class="meta-links">{sep.join(links)}</span>'
@@ -336,7 +355,7 @@ def render_article(p: Paper) -> str:
         {note}
         {body}
       </article>"""
-    return shell(f"{p.title_ru} — {SITE_TITLE}", p.meta["title"], article, depth=1)
+    return shell(f"{p.title_ru} | {SITE_TITLE}", p.meta["title"], article, depth=1)
 
 
 def search_index(papers: list[Paper]) -> list[dict]:
@@ -347,6 +366,7 @@ def search_index(papers: list[Paper]) -> list[dict]:
             "title": p.meta.get("title", ""),
             "authors": p.authors,
             "year": p.meta.get("year", ""),
+            "topics": p.topics,
         }
         for p in papers
     ]

@@ -1,8 +1,8 @@
 <div align="center">
 
-# ml-bio-papers
+# ml-papers
 
-Unofficial translations and structured summaries of scientific papers on machine learning in biology — metagenomics, proteins, molecules.
+Unofficial translations and structured summaries of scientific ML papers — metagenomics, NLP, agents, and related areas.
 
 Every translation states its original source (DOI), the license it is made under, and its review status: machine translation, machine translation + LLM review, or human-verified.
 
@@ -41,16 +41,19 @@ In case of any discrepancy, the original prevails.
 ## Structure
 
 ```
-ml-bio-papers/
+ml-papers/
 ├── README.md               # this file
 ├── README.ru.md            # Russian version
 ├── TRANSLATION.md          # translation conventions: what stays byte-identical, header format, style
+├── topics.yml              # allowlist for meta.yml → topics
 ├── glossary/               # one term = one consistent translation across all papers
 └── papers/                 # one folder per paper
     └── YYYY-name/
         ├── index.md        # translation / summary = future site page
-        └── meta.yml        # DOI, authors, journal, license, status, Zenodo DOI
+        └── meta.yml        # DOI, authors, journal, license, status, topics, Zenodo DOI
 ```
+
+`meta.yml` must include a non-empty `topics` list. Every entry must appear in [`topics.yml`](topics.yml) (any count from the allowlist). `make lint` rejects unknown or missing topics.
 
 ## License
 

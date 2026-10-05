@@ -83,6 +83,7 @@
     if (!q) return [];
     return papers.filter(function (p) {
       return [p.title_ru, p.title, p.authors, String(p.year), p.slug]
+        .concat(p.topics || [])
         .join(" ")
         .toLowerCase()
         .includes(q);
