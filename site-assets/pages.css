@@ -400,14 +400,6 @@ html.dark .theme-btn .moon {
   line-height: 1.4;
   color: #8e8e8e;
   margin: 0 0 1.5em;
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
 }
 
 .tl_article address a {
@@ -625,6 +617,11 @@ html {
   margin: 1.1em 0 0;
 }
 
+/* Override .tl_article ul { padding-left: 1.35em } so titles share the lead's left edge */
+.tl_article ul.blog-index {
+  padding-left: 0;
+}
+
 .blog-index li {
   margin: 0 0 1.4em;
   padding-bottom: 1.4em;
@@ -649,6 +646,7 @@ html {
 .blog-index a {
   font-size: 1.05em;
   font-weight: 700;
+  line-height: 1.3;
   color: var(--ink);
   text-decoration: none;
   text-decoration-thickness: 1px;
@@ -672,23 +670,27 @@ html {
 }
 
 .blog-index__meta {
-  margin: 0.2em 0 0;
+  margin: 0.45em 0 0;
   font-size: 14px;
+  line-height: 1.4;
   color: #6b6b6b;
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
 }
 
 .blog-index__excerpt {
-  margin: 0.35em 0 0;
+  margin: 0.55em 0 0;
   color: var(--text);
   line-height: 1.55;
+}
+
+.topic-chip {
+  font-size: inherit;
+  color: inherit;
+  letter-spacing: 0.02em;
+}
+
+.topic-chip::before {
+  content: "#";
+  opacity: 0.55;
 }
 
 .blog-agent-notes {
@@ -984,7 +986,7 @@ a.cv-download:focus-visible {
   background: #faf8f4;
 }
 
-/* ml-bio-papers: stretched link for the paper list (same pattern as /notes/) */
+/* ml-papers: stretched link for the paper list (same pattern as /notes/) */
 .blog-index a.paper-link::after {
   content: "";
   position: absolute;
@@ -1009,6 +1011,9 @@ html.dark .blog-index__meta {
 }
 html.dark .blog-index__excerpt {
   color: var(--text);
+}
+html.dark .topic-chip {
+  color: var(--mut);
 }
 html.dark .blog-index li {
   border-bottom-color: var(--line);

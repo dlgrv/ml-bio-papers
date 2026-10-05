@@ -1,5 +1,5 @@
 [project]
-name = "ml-bio-papers"
+name = "ml-papers"
 version = "0"
 requires-python = ">=3.11"
 dependencies = ["pyyaml>=6", "defusedxml>=0.7", "typst>=0.14"]

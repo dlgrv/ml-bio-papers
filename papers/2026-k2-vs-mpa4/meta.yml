@@ -21,3 +21,6 @@ year: 2026
 license: "CC BY 4.0"
 status: "machine-translated"
 zenodo-doi: ""
+
+topics:
+  - metagenomics
