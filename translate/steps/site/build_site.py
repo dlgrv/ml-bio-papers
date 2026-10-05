@@ -138,6 +138,7 @@ CITE_GROUP_RE = re.compile(r"\[(\d+(?:\s*[,–-]\s*\d+)*)\]")
 CITE_NUM_RE = re.compile(r"\d+")
 A_TAG_RE = re.compile(r"<a\b[^>]*>.*?</a>", re.DOTALL | re.IGNORECASE)
 DOI_TOKEN_RE = re.compile(r"doi:(10\.\d+/[^\s<]+)", re.IGNORECASE)
+IMG_TAG_RE = re.compile(r"<img\b([^>]*)>", re.IGNORECASE)
 
 
 def split_note(md: str) -> tuple[str, str]:
@@ -209,6 +210,13 @@ def link_reference_dois(body: str) -> str:
     return REFS_OL_RE.sub(on_ol, body)
 
 
+def _lazy_img(m: re.Match[str]) -> str:
+    attrs = m.group(1)
+    if re.search(r"\bloading\s*=", attrs, re.IGNORECASE):
+        return m.group(0)
+    return f'<img loading="lazy" decoding="async"{attrs}>'
+
+
 def decorate(body: str) -> str:
     body = FIG_WITH_IMG_RE.sub(
         r'<div class="figure-box"><p>\1</p><p>\2</p></div>',
@@ -224,6 +232,7 @@ def decorate(body: str) -> str:
         return f'<div class="figure-box"><p>{m.group(1)}</p></div>'
 
     body = FIG_CAPTION_ONLY_RE.sub(wrap_caption, body)
+    body = IMG_TAG_RE.sub(_lazy_img, body)
     body = OL_RE.sub(r'\1<ol class="references">', body)
     body = anchor_references(body)
     body = link_reference_dois(body)
@@ -348,7 +357,6 @@ def build(root: Path, out: Path) -> list[str]:
     (out / "static").mkdir(parents=True)
     for name in ("pages.css", "paper.css", "site.js"):
         shutil.copy(root / "site-assets" / name, out / "static" / name)
-    shutil.copytree(root / "site-assets" / "fonts", out / "static" / "fonts")
     papers = load_papers(root)
     (out / "static" / "search.json").write_text(
         json.dumps(search_index(papers), ensure_ascii=False, indent=1) + "\n",
