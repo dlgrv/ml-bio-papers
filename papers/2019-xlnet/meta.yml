@@ -1,0 +1,18 @@
+title: "XLNet: Generalized Autoregressive Pretraining for Language Understanding"
+authors:
+  - "Zhilin Yang"
+  - "Zihang Dai"
+  - "Yiming Yang"
+  - "Jaime Carbonell"
+  - "Ruslan Salakhutdinov"
+  - "Quoc V. Le"
+doi: "10.48550/arXiv.1906.08237"
+arxiv: "1906.08237"
+journal: "NeurIPS"
+year: 2019
+license: "arXiv perpetual non-exclusive"
+status: "machine-translated"
+zenodo-doi: ""
+
+topics:
+  - transformers
