@@ -67,7 +67,7 @@ def _figure_block(u: dict, body: str, *, original: bool) -> str:
     label = _label(u["label"], original=original) if u.get("label") else ""
     parts: list[str] = []
     for name in u.get("graphics") or []:
-        alt = label.rstrip(".") if label else name
+        alt = label.rstrip(".") if label else ""
         parts.append(f"![{alt}](assets/{name})")
     if label:
         parts.append(f"**{label}.** {body}")

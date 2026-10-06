@@ -323,7 +323,7 @@ html.dark .theme-btn .moon {
 .tl_page {
   max-width: 960px;
   margin: 0 auto;
-  padding: calc(var(--nav-h) + 24px) 24px 64px;
+  padding: calc(var(--nav-h) + 40px) 24px 72px;
 }
 
 @media (max-width: 640px) {
@@ -611,20 +611,191 @@ html {
   margin: 1.5em 0;
 }
 
+/* Index page: lead → controls → rule → list */
+.tl_article:has(.blog-index) > p:first-of-type {
+  margin: 0 0 1.75rem;
+}
+
+.blog-index-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
+  margin: 0 0 2rem;
+  padding: 0 0 1.15rem;
+  border-bottom: 1px solid #ececec;
+  font-size: 13px;
+  color: #6b6b6b;
+}
+
+.blog-index-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.blog-index-control__label {
+  white-space: nowrap;
+  color: inherit;
+}
+
+/* Shared trigger chrome: sort select + topics summary */
+.blog-index-select,
+.tag-filter__summary {
+  --trigger-pad-y: 0.3em;
+  --trigger-pad-x: 0.65em;
+  --trigger-chevron-slot: 1.1em;
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 2em;
+  padding: var(--trigger-pad-y) var(--trigger-chevron-slot) var(--trigger-pad-y)
+    var(--trigger-pad-x);
+  font: inherit;
+  font-size: inherit;
+  line-height: 1.2;
+  color: inherit;
+  background: transparent;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+}
+
+.blog-index-select::after,
+.tag-filter__summary::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0.55em;
+  width: 0.32em;
+  height: 0.32em;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-65%) rotate(45deg);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.tag-filter[open] .tag-filter__summary::after {
+  transform: translateY(-20%) rotate(225deg);
+}
+
+.blog-index-select select {
+  display: block;
+  width: 7.25em; /* «Сложность ↓»; JS sets exact max option width */
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.blog-index-select select:focus {
+  outline: none;
+}
+
+.blog-index-select:focus-within,
+.tag-filter__summary:focus-visible {
+  border-color: #b0b0b0;
+  outline: 2px solid transparent;
+}
+
+.tag-filter {
+  position: relative;
+}
+
+.tag-filter__summary {
+  width: max-content;
+  max-width: 100%;
+  gap: 0;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.tag-filter__summary::-webkit-details-marker {
+  display: none;
+}
+
+.tag-filter__label {
+  flex: 0 0 auto;
+}
+
+.tag-filter__count {
+  flex: 0 0 auto;
+  display: inline-block;
+  box-sizing: content-box;
+  width: 2em; /* «: N» — same empty or selected */
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-filter__count::before {
+  content: ": ";
+}
+
+/* Hide label, keep the reserved width */
+.tag-filter__count[data-empty="1"] {
+  visibility: hidden;
+}
+
+.tag-filter__menu {
+  position: absolute;
+  top: calc(100% + 0.4em);
+  left: 0;
+  z-index: 20;
+  box-sizing: border-box;
+  min-width: 100%;
+  width: max-content;
+  max-height: 16em;
+  overflow: auto;
+  padding: 0.3em;
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.tag-filter__option {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.35em 0.45em;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.tag-filter__option:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.tag-filter__option input {
+  margin: 0;
+  accent-color: #555;
+}
+
 .blog-index {
   list-style: none;
   padding: 0;
-  margin: 1.1em 0 0;
+  margin: 0;
 }
 
 /* Override .tl_article ul { padding-left: 1.35em } so titles share the lead's left edge */
 .tl_article ul.blog-index {
   padding-left: 0;
+  margin: 0;
 }
 
 .blog-index li {
-  margin: 0 0 1.4em;
-  padding-bottom: 1.4em;
+  margin: 0 0 2rem;
+  padding: 0 0 2rem;
   border-bottom: 1px solid #ececec;
   position: relative;
 }
@@ -641,6 +812,7 @@ html {
 .blog-index li:last-child {
   border-bottom: none;
   margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .blog-index a {
@@ -670,16 +842,28 @@ html {
 }
 
 .blog-index__meta {
-  margin: 0.45em 0 0;
+  margin: 0.55em 0 0;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
   color: #6b6b6b;
 }
 
+.blog-index__meta > * {
+  margin: 0;
+}
+
+.blog-index__meta > * + * {
+  margin-top: 0.28em;
+}
+
 .blog-index__excerpt {
-  margin: 0.55em 0 0;
+  margin: 0.4em 0 0;
   color: var(--text);
-  line-height: 1.55;
+  line-height: 1.45;
+}
+
+.blog-index__excerpt + .blog-index__meta {
+  margin-top: 0.55em;
 }
 
 .topic-chip {
@@ -1015,6 +1199,25 @@ html.dark .blog-index a.paper-link {
 html.dark .tl_article address,
 html.dark .blog-index__meta {
   color: var(--mut);
+}
+html.dark .blog-index-toolbar {
+  color: var(--mut);
+  border-bottom-color: var(--line);
+}
+html.dark .blog-index-select,
+html.dark .tag-filter__summary,
+html.dark .tag-filter__menu {
+  border-color: var(--line);
+}
+html.dark .tag-filter__menu {
+  background: var(--bg, #1a1a1a);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+html.dark .tag-filter__option:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+html.dark .tag-filter__count:not([data-empty="1"]) {
+  color: var(--ink);
 }
 html.dark .blog-index__excerpt {
   color: var(--text);

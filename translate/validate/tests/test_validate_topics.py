@@ -26,7 +26,7 @@ def _write_paper(root: Path, slug: str, meta: dict) -> None:
 
 def _allowlist(root: Path, topics: list[str] | None = None) -> None:
     (root / "topics.yml").write_text(
-        yaml.safe_dump({"topics": topics or ["metagenomics", "llm", "rag"]}),
+        yaml.safe_dump({"topics": topics or ["metagenomics", "finance", "biomedical"]}),
         encoding="utf-8",
     )
 
@@ -34,13 +34,15 @@ def _allowlist(root: Path, topics: list[str] | None = None) -> None:
 def test_load_allowlist_from_repo():
     allowed = load_allowlist(REPO_ROOT)
     assert "metagenomics" in allowed
-    assert "agents" in allowed
+    assert "transformers" in allowed
+    assert "biomedical" in allowed
+    assert "agents" not in allowed
 
 
 def test_valid_single_and_multi_topic(tmp_path):
     _allowlist(tmp_path)
     _write_paper(tmp_path, "2019-a", {"title": "A", "topics": ["metagenomics"]})
-    _write_paper(tmp_path, "2020-b", {"title": "B", "topics": ["llm", "rag"]})
+    _write_paper(tmp_path, "2020-b", {"title": "B", "topics": ["finance", "biomedical"]})
     assert validate_topics(tmp_path) == []
 
 
