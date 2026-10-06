@@ -54,6 +54,7 @@ def _dl_for_article_and_image(html: bytes | None = None):
 def test_is_image_bytes_jpeg_and_rejects_html():
     assert pmc_media.is_image_bytes(JPEG)
     assert not pmc_media.is_image_bytes(b"<!doctype html>")
+    assert pmc_media.is_image_bytes(b'<svg xmlns="http://www.w3.org/2000/svg"></svg>')
 
 
 def test_resolve_graphic_urls_from_article_html():
@@ -153,3 +154,24 @@ def test_fetch_assets_missing_pmcid(tmp_path):
     dl = mock.Mock(return_value=b"img")
     assert fa.fetch_assets("2019-kraken2", root=str(tmp_path), download=dl) == 2
     dl.assert_not_called()
+
+
+def test_fetch_assets_arxiv_svg(tmp_path):
+    paper = tmp_path / "papers" / "2019-bert"
+    paper.mkdir(parents=True)
+    (paper / "meta.yml").write_text("arxiv: 1810.04805\n", encoding="utf-8")
+    wd = tmp_path / "translate" / "runs" / "2019-bert"
+    wd.mkdir(parents=True)
+    (wd / "units.json").write_text(
+        json.dumps([{"kind": "figure", "id": "f1", "graphics": ["1810.04805v2/fig1.svg"]}]),
+        encoding="utf-8",
+    )
+    svg = b'<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>'
+
+    def dl(url: str) -> bytes:
+        assert url == "https://export.arxiv.org/html/1810.04805/1810.04805v2/fig1.svg"
+        return svg
+
+    assert fa.fetch_assets("2019-bert", root=str(tmp_path), download=dl) == 0
+    dest = paper / "assets" / "fig1.svg"
+    assert dest.read_bytes() == svg

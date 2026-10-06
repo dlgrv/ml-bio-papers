@@ -68,6 +68,17 @@ def test_section_xref_resolves_to_translated_heading():
     assert "“Методы”" in md
 
 
+def test_section_xref_unmasks_placeholders_in_heading():
+    us = units()
+    tr = identity(us)
+    methods = next(u for u in us if u["src_id"] == "Sec2")
+    methods["spans"] = {"⟦N1⟧": {"type": "N", "md": "BERT"}}
+    tr[methods["id"]] = "Методы ⟦N1⟧"
+    md = rm.render(us, tr, original=False)
+    assert "⟦N1⟧" not in md
+    assert "Методы BERT" in md
+
+
 def test_references_are_copied_verbatim_in_both_modes():
     us = units()
     refs = [u["source_md"] for u in us if u["kind"] == "ref"]

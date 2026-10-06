@@ -63,5 +63,31 @@ def test_missing_pmcid_in_meta(tmp_path):
     meta = tmp_path / "papers" / "2019-kraken2"
     meta.mkdir(parents=True)
     (meta / "meta.yml").write_text("title: x\n", encoding="utf-8")
-    with pytest.raises(ValueError, match="pmcid"):
+    with pytest.raises(ValueError, match="pmcid or arxiv"):
         fj.fetch("2019-kraken2", root=str(tmp_path))
+
+
+ARXIV_HTML = (Path(__file__).parent / "fixtures" / "mini_latexml.html").read_bytes()
+
+
+def test_arxiv_html_url():
+    assert fj.arxiv_html_url("1810.04805") == "https://export.arxiv.org/html/1810.04805"
+    assert fj.arxiv_html_url("1810.04805v2").endswith("1810.04805v2")
+
+
+def test_bad_arxiv_id_rejected():
+    with pytest.raises(ValueError, match="arxiv"):
+        fj.arxiv_html_url("not-an-id")
+
+
+def test_fetch_arxiv_converts_html_to_jats(tmp_path):
+    meta = tmp_path / "papers" / "2019-bert"
+    meta.mkdir(parents=True)
+    (meta / "meta.yml").write_text("arxiv: 1810.04805\n", encoding="utf-8")
+    with mock.patch.object(fj, "download", return_value=ARXIV_HTML) as dl:
+        out = fj.fetch("2019-bert", root=str(tmp_path))
+    dl.assert_called_once()
+    xml = out.read_text(encoding="utf-8")
+    assert "<article" in xml
+    assert "Mini Transformer Paper" in xml
+    assert "chrome" not in xml
