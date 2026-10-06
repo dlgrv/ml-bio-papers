@@ -1,4 +1,4 @@
-# **BERT**: Предобучение (pre-training) глубоких двунаправленных трансформеров для понимания языка
+# BERT: Предобучение (pre-training) глубоких двунаправленных трансформеров для понимания языка
 
 > **Неофициальный перевод.** Оригинал: Jacob Devlin, Ming-Wei Chang, Kenton Lee, Kristina Toutanova. «BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding». NAACL-HLT, 2019. DOI: [10.18653/v1/N19-1423](https://doi.org/10.18653/v1/N19-1423). Лицензия: CC BY 4.0.
 

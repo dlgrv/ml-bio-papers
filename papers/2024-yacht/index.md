@@ -1,4 +1,4 @@
-# `YACHT`: это статистический тест, основанный на показателе средней нуклеотидной идентичности (ANI), предназначенный для определения наличия или отсутствия микроорганизмов в метагеномном образце.
+# YACHT: статистический тест на основе ANI для выявления присутствия или отсутствия микроорганизмов в метагеномном образце
 
 > **Неофициальный перевод.** Оригинал: David Koslicki, Stephen White, Chunyu Ma, Alexei Novikov. «YACHT: an ANI-based statistical test to detect microbial presence/absence in a metagenomic sample». Bioinformatics, 2024. DOI: [10.1093/bioinformatics/btae047](https://doi.org/10.1093/bioinformatics/btae047). Лицензия: CC BY 4.0.
 
