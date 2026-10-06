@@ -18,5 +18,6 @@ zenodo-doi: ""
 
 topics:
   - transformers
+  - biomedical
 
 difficulty: 6

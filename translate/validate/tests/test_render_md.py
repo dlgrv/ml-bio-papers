@@ -49,6 +49,27 @@ def test_render_emits_image_markdown():
     assert "![Рис. 1](assets/13059_2019_1891_Fig1_HTML.jpg)" in ru
 
 
+def test_unlabeled_figure_uses_empty_alt():
+    us = [
+        {
+            "id": "u001",
+            "kind": "figure",
+            "level": 0,
+            "translate": True,
+            "text": "caption",
+            "spans": {},
+            "src_id": "",
+            "label": "",
+            "graphics": ["BERT_Overall.svg"],
+            "source_md": "caption",
+        }
+    ]
+    md = rm.render(us, {"u001": "подпись"}, original=False)
+    assert "![](assets/BERT_Overall.svg)" in md
+    assert "![BERT_Overall.svg]" not in md
+    assert "подпись" in md
+
+
 def test_russian_render_uses_fixed_headings_and_ru_figure_label():
     us = units()
     tr = {u["id"]: u["text"] for u in us if u["translate"]}

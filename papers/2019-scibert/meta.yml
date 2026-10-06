@@ -13,5 +13,6 @@ zenodo-doi: ""
 
 topics:
   - transformers
+  - scientific-nlp
 
 difficulty: 6

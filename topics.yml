@@ -3,9 +3,7 @@
 topics:
   - metagenomics
   - transformers
-  - retrieval
-  - llm
-  - prompting
-  - rag
-  - dialogue
-  - agents
+  - biomedical
+  - finance
+  - multilingual
+  - scientific-nlp

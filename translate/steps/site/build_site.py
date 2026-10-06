@@ -108,19 +108,93 @@ def difficulty_html(n: int, note: str = "") -> str:
     return f'<span class="difficulty-chip">{html.escape(difficulty_label(n, note))}</span>'
 
 
-def topics_suffix(topics: list[str]) -> str:
-    """Inline topic chips for meta lines (empty if no topics)."""
+WORDS_PER_MIN = 120
+_MD_FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+_MD_IMAGE_RE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
+_MD_LINK_RE = re.compile(r"\[([^\]]+)\]\([^)]*\)")
+_MD_HEADING_RE = re.compile(r"^#{1,6}\s+", re.MULTILINE)
+_MD_QUOTE_RE = re.compile(r"^>\s?", re.MULTILINE)
+_WS_RE = re.compile(r"\s+")
+
+
+def reading_minutes(body_md: str) -> int:
+    """Estimate reading time for dense scientific RU text (~120 wpm)."""
+    text = body_md or ""
+    text = _MD_FENCE_RE.sub(" ", text)
+    text = _MD_IMAGE_RE.sub(" ", text)
+    text = _MD_LINK_RE.sub(r"\1", text)
+    text = _MD_HEADING_RE.sub("", text)
+    text = _MD_QUOTE_RE.sub("", text)
+    text = re.sub(r"[*_`#|]", " ", text)
+    words = [w for w in _WS_RE.split(text.strip()) if w]
+    if not words:
+        return 1
+    return max(1, round(len(words) / WORDS_PER_MIN))
+
+
+def topic_chips_html(topics: list[str], *, sep: str = " ") -> str:
+    """Topic chip spans joined by sep (empty if no topics)."""
     if not topics:
         return ""
-    chips = META_SEP.join(f'<span class="topic-chip">{html.escape(t)}</span>' for t in topics)
-    return f"{META_SEP}{chips}"
+    return sep.join(f'<span class="topic-chip">{html.escape(t)}</span>' for t in topics)
 
 
-def difficulty_suffix(n: int | None, note: str = "") -> str:
-    """Inline difficulty text for meta lines (empty if unset)."""
-    if n is None:
-        return ""
-    return f"{META_SEP}{difficulty_html(n, note)}"
+def index_meta_html(p: Paper) -> str:
+    """Stacked catalog meta: difficulty / reading time / topics / authors / venue."""
+    lines: list[str] = []
+    if p.difficulty is not None:
+        lines.append(
+            f'<div class="blog-index__difficulty">'
+            f"{difficulty_html(p.difficulty, p.difficulty_note)}"
+            f"</div>"
+        )
+    mins = reading_minutes(p.body_md)
+    lines.append(f'<div class="blog-index__reading-time">~{mins} мин</div>')
+    chips = topic_chips_html(p.topics)
+    if chips:
+        lines.append(f'<div class="blog-index__topics">{chips}</div>')
+    lines.append(f'<div class="blog-index__authors">{html.escape(p.authors)}</div>')
+    lines.append(
+        f'<div class="blog-index__venue">'
+        f"{html.escape(str(p.meta.get('journal', '')))}, {p.meta.get('year', '')}"
+        f"</div>"
+    )
+    inner = "\n            ".join(lines)
+    return f'<div class="blog-index__meta">\n            {inner}\n          </div>'
+
+
+def index_toolbar_html(papers: list[Paper]) -> str:
+    """Compact sort + topics dropdown for the homepage."""
+    topics = sorted({t for p in papers for t in p.topics})
+    options = "".join(
+        f'<label class="tag-filter__option">'
+        f'<input type="checkbox" data-topic="{html.escape(t)}" value="{html.escape(t)}"/>'
+        f"<span>#{html.escape(t)}</span></label>"
+        for t in topics
+    )
+    topics_block = ""
+    if options:
+        topics_block = f"""          <details class="tag-filter" id="tag-filter">
+            <summary class="tag-filter__summary" aria-label="Темы">
+              <span class="tag-filter__label">Темы</span>
+              <span class="tag-filter__count" data-empty="1"></span>
+            </summary>
+            <div class="tag-filter__menu" role="group" aria-label="Темы">{options}</div>
+          </details>"""
+    return f"""        <div class="blog-index-toolbar">
+          <label class="blog-index-control">
+            <span class="blog-index-control__label">Сортировка</span>
+            <span class="blog-index-select">
+              <select id="sort" aria-label="Сортировка списка">
+                <option value="year-desc" selected>Год ↓</option>
+                <option value="year-asc">Год ↑</option>
+                <option value="difficulty-asc">Сложность ↑</option>
+                <option value="difficulty-desc">Сложность ↓</option>
+              </select>
+            </span>
+          </label>
+{topics_block}
+        </div>"""
 
 
 _MD_BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
@@ -365,10 +439,10 @@ def shell(title: str, description: str, article: str, *, depth: int) -> str:
 def render_index(papers: list[Paper]) -> str:
     items = "".join(
         f"""
-          <li data-slug="{html.escape(p.slug)}">
+          <li data-slug="{html.escape(p.slug)}" data-year="{html.escape(str(p.meta.get("year") or ""))}" data-difficulty="{"" if p.difficulty is None else p.difficulty}" data-topics="{" ".join(html.escape(t) for t in p.topics)}" data-reading-minutes="{reading_minutes(p.body_md)}">
             <a class="paper-link" href="{p.slug}/">{html.escape(p.title_ru)}</a>
-            <div class="blog-index__meta">{html.escape(p.authors)}{META_SEP}{html.escape(str(p.meta.get("journal", "")))}, {p.meta.get("year", "")}{topics_suffix(p.topics)}{difficulty_suffix(p.difficulty, p.difficulty_note)}</div>
             <p class="blog-index__excerpt">{html.escape(p.meta["title"])}</p>
+            {index_meta_html(p)}
           </li>"""
         for p in papers
     )
@@ -378,6 +452,7 @@ def render_index(papers: list[Paper]) -> str:
     )
     article = f"""      <article class="tl_article">
         {lead}
+{index_toolbar_html(papers)}
         <ul class="blog-index">{items}
         </ul>
       </article>"""
@@ -390,10 +465,13 @@ def render_article(p: Paper) -> str:
     note_md, body_md = split_note(p.body_md)
     note = pandoc_html(note_md) if note_md else ""
     body = decorate(pandoc_html(body_md))
-    doi = p.meta.get("doi", "")
+    doi = (p.meta.get("doi") or "").strip()
+    pdf = (p.meta.get("pdf") or p.meta.get("url") or "").strip()
     links = ['<a href="../">Все переводы</a>']
     if doi:
         links.append(f'<a href="https://doi.org/{html.escape(doi)}">Оригинал</a>')
+    elif pdf:
+        links.append(f'<a href="{html.escape(pdf)}">Оригинал</a>')
     if p.has_pdf:
         links.append('<a href="index.pdf">PDF</a>')
     links.append(f'<a href="{REPO_URL}/blob/main/papers/{p.slug}/index.md">Markdown</a>')
@@ -403,9 +481,7 @@ def render_article(p: Paper) -> str:
         f"{html.escape(str(p.meta.get('journal', '')))}, {p.meta.get('year', '')}",
     ]
     if p.topics:
-        info.append(
-            META_SEP.join(f'<span class="topic-chip">{html.escape(t)}</span>' for t in p.topics)
-        )
+        info.append(topic_chips_html(p.topics, sep=META_SEP))
     if p.difficulty is not None:
         info.append(difficulty_html(p.difficulty, p.difficulty_note))
     meta_line = (
@@ -431,6 +507,7 @@ def search_index(papers: list[Paper]) -> list[dict]:
             "year": p.meta.get("year", ""),
             "topics": p.topics,
             "difficulty": p.difficulty,
+            "reading_minutes": reading_minutes(p.body_md),
         }
         for p in papers
     ]

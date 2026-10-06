@@ -77,20 +77,43 @@ def test_index_lists_paper_with_relative_link(tmp_path):
     assert build_site.REPO_URL in idx
     assert 'src="static/site.js"' in idx
     assert 'data-slug="2019-a"' in idx
+    assert 'data-year="2019"' in idx
+    assert 'data-difficulty="8"' in idx
+    assert 'data-topics="metagenomics"' in idx
+    assert "data-reading-minutes=" in idx
+    assert 'id="sort"' in idx
+    assert 'value="year-asc"' in idx
+    assert 'value="year-desc"' in idx
+    assert 'class="blog-index-toolbar"' in idx
+    assert 'id="tag-filter"' in idx
+    assert 'data-topic="metagenomics"' in idx
+    assert 'class="tag-filter__option"' in idx
     assert 'class="blog-index__meta"' in idx
-    assert 'class="blog-index__topics"' not in idx
-    assert 'class="topic-chip">metagenomics</span>' in idx
-    # Topics sit inside the meta line with authors/journal.
-    meta_start = idx.index('class="blog-index__meta"')
-    excerpt_start = idx.index('class="blog-index__excerpt"', meta_start)
-    meta = idx[meta_start:excerpt_start]
-    assert 'class="topic-chip">metagenomics</span>' in meta
+    link_pos = idx.index('class="paper-link"')
+    excerpt_pos = idx.index('class="blog-index__excerpt"', link_pos)
+    meta_pos = idx.index('class="blog-index__meta"', excerpt_pos)
+    assert excerpt_pos < meta_pos
+    meta_end = idx.index("</li>", meta_pos)
+    meta = idx[meta_pos:meta_end]
+    assert 'class="blog-index__excerpt">Orig</p>' in idx[excerpt_pos:meta_pos]
+    assert 'class="blog-index__difficulty">' in meta
     assert 'class="difficulty-chip">Сложность 8/10. Статья понятная, но большая.</span>' in meta
+    assert 'class="blog-index__reading-time">' in meta
+    assert " мин</div>" in meta
+    assert 'class="blog-index__topics">' in meta
+    assert 'class="topic-chip">metagenomics</span>' in meta
+    assert 'class="blog-index__authors">A. One</div>' in meta
+    assert 'class="blog-index__venue">J, 2019</div>' in meta
+    assert meta.index("blog-index__difficulty") < meta.index("blog-index__reading-time")
+    assert meta.index("blog-index__reading-time") < meta.index("blog-index__topics")
+    assert meta.index("blog-index__topics") < meta.index("blog-index__authors")
+    assert meta.index("blog-index__authors") < meta.index("blog-index__venue")
     search = (tmp_path / "out" / "static" / "search.json").read_text(encoding="utf-8")
     assert "2019-a" in search
     assert '"topics"' in search
     assert "metagenomics" in search
     assert '"difficulty": 8' in search
+    assert '"reading_minutes"' in search
     assert (tmp_path / "out" / "static" / "site.js").read_text(encoding="utf-8") == "// stub\n"
 
 
@@ -125,18 +148,40 @@ def test_article_page_uses_paper_layout(tmp_path):
 
 
 def test_multi_topics_on_index_and_search(tmp_path):
-    _paper(tmp_path, "2019-a", topics=["llm", "prompting", "rag"])
+    _paper(tmp_path, "2019-a", topics=["transformers", "finance", "multilingual"])
     build_site.build(tmp_path, tmp_path / "out")
     idx = (tmp_path / "out" / "index.html").read_text(encoding="utf-8")
+    assert 'data-topics="transformers finance multilingual"' in idx
+    for t in ("transformers", "finance", "multilingual"):
+        assert f'data-topic="{t}"' in idx
+    assert idx.count('class="tag-filter__option"') == 3
     meta_start = idx.index('class="blog-index__meta"')
-    excerpt_start = idx.index('class="blog-index__excerpt"', meta_start)
-    meta = idx[meta_start:excerpt_start]
-    for t in ("llm", "prompting", "rag"):
-        assert f'class="topic-chip">{t}</span>' in meta
+    meta_end = idx.index("</li>", meta_start)
+    meta = idx[meta_start:meta_end]
+    topics_start = meta.index('class="blog-index__topics"')
+    topics_end = meta.index("</div>", topics_start)
+    topics = meta[topics_start:topics_end]
+    for t in ("transformers", "finance", "multilingual"):
+        assert f'class="topic-chip">{t}</span>' in topics
+    assert 'topic-chip">transformers</span> <span class="topic-chip">finance' in topics
+    assert " · " not in topics
     search = (tmp_path / "out" / "static" / "search.json").read_text(encoding="utf-8")
-    assert '"llm"' in search
-    assert '"prompting"' in search
-    assert '"rag"' in search
+    assert '"transformers"' in search
+    assert '"finance"' in search
+    assert '"multilingual"' in search
+
+
+def test_reading_minutes_from_body_words(tmp_path):
+    _paper(tmp_path, "2019-a")
+    body = "# Заголовок\n\n" + ("слово " * 240)
+    (tmp_path / "papers" / "2019-a" / "index.md").write_text(body, encoding="utf-8")
+    assert build_site.reading_minutes(body) == 2
+    build_site.build(tmp_path, tmp_path / "out")
+    idx = (tmp_path / "out" / "index.html").read_text(encoding="utf-8")
+    assert 'data-reading-minutes="2"' in idx
+    assert 'class="blog-index__reading-time">~2 мин</div>' in idx
+    search = (tmp_path / "out" / "static" / "search.json").read_text(encoding="utf-8")
+    assert '"reading_minutes": 2' in search
 
 
 def test_citations_link_to_reference_anchors(tmp_path):
