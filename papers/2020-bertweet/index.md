@@ -1,0 +1,136 @@
+# BERTweet: Предобученная языковая модель, предназначенная для обработки английских твитов.
+
+> **Неофициальный перевод.** Оригинал: Dat Quoc Nguyen, Thanh Vu, Anh Tuan Nguyen. «BERTweet: A pre-trained language model for English Tweets». EMNLP Findings, 2020. DOI: [10.18653/v1/2020.findings-emnlp.196](https://doi.org/10.18653/v1/2020.findings-emnlp.196). Лицензия: CC BY 4.0.
+
+## Аннотация
+
+Мы представляем **BERTweet** — *первую* публичную крупномасштабную языковую модель, прошедшую предобучение (pre-training) для обработки английских твитов. Наша модель BERTweet, имеющая такую же архитектуру, как BERTbase ([Devlin et al., 2019]), обучается с применением процедуры предобучения (pre-training) RoBERTa ([Liu et al., 2019]). Эксперименты показывают, что модель BERTweet превосходит такие мощные базовые модели, как RoBERTabase и XLM-Rbase ([Conneau et al., 2020]); при этом она демонстрирует лучшие результаты по сравнению с ранее существовавшими передовыми моделями в трех задачах обработки твитов: разметке частей речи, распознавании именованных сущностей и классификации текстов. Мы выпускаем модель BERTweet под лицензией MIT, чтобы способствовать дальнейшим исследованиям и применениям в области обработки данных из твитов. Доступ к нашей модели BERTweet можно получить по адресу: [https://github.com/VinAIResearch/BERTweet](https://github.com/VinAIResearch/BERTweet).
+
+## Введение
+
+Языковая модель BERT ([Devlin et al., 2019]) — Bidirectional Encoder Representations from Transformers ([Vaswani et al., 2017]) — и её варианты позволили достичь новых рекордных результатов в различных задачах обработки естественного языка. Эти успехи в основном проявились в типичных англоязычных доменах, таких как Википедия, новостные источники и книги. В специфических областях, например в биомедицине или науке, можно переобучить модель, ориентированную на конкретный домен, с использованием архитектуры BERTology [Beltagy et al. (2019)]; [Lee et al. (2019)]; [Gururangan et al. (2020)].
+
+Twitter является одной из самых популярных микроблоговых платформ, позволяющих пользователям делиться информацией в режиме реального времени по самым разным темам и событиям. Огромный и обильный объем данных в виде твитов доказал свою эффективность как широко используемый источник информации в режиме реального времени для решения различных важных аналитических задач [Ghani et al. (2019)]. Следует отметить, что характеристики твитов, как правило, отличаются от характеристик традиционного письменного текста, например статей Википедии или новостных материалов; это обусловлено их обычно небольшой длиной, частым использованием неформальной грамматики, а также нерегулярной лексики – сокращений, опечаток и хэштегов ([Eisenstein, 2013]; [Han et al., 2013]). Вследствие этого возникают трудности при применении существующих языковых моделей, предварительно обученных на крупномасштабных корпусах обычного текста с формальной грамматикой и регулярной лексикой, для выполнения аналитических задач над данными твитов. Насколько нам известно, в настоящее время не существует ни одной языковой модели, предварительно обученной на крупномасштабном корпусе английских твитов.
+
+Чтобы заполнить этот пробел, мы обучили *первую* крупномасштабную языковую модель для английских твитов, используя корпус из 850 миллионов английских твитов объемом 80 ГБ. Наша модель основана на конфигурации BERTbase и обучена с применением процедуры предобучения RoBERTa ([Liu et al., 2019]). Мы провели оценку нашей модели и сравнили её с такими конкурентными моделями, как RoBERTabase и XLM-Rbase ([Conneau et al., 2020]), на трех задачах обработки естественного языка для твитов: разметке частей речи, распознавании именованных сущностей и классификации текстов. Эксперименты показали, что наша модель превосходит RoBERTabase, XLM-Rbase, а также ранее существовавшие модели уровня SOTA во всех этих задачах. Наш вклад заключается в следующем:
+
+## BERTweet
+
+В данном разделе мы описываем архитектуру, а также предобучение данные и параметры оптимизации, используемые нами для BERTweet.
+
+### Архитектура
+
+Наша модель BERTweet использует ту же архитектуру, что и BERTbase; она обучается с использованием цели маскированного языкового моделирования ([Devlin et al., 2019]). Процедура предобучения BERTweet основывается на работе RoBERTa ([Liu et al., 2019]), направленной на оптимизацию подхода к предобучению BERT для достижения более устойчивой производительности. Учитывая широкое применение BERT и RoBERTa, мы не приводим здесь подробностей об архитектуре. Более подробную информацию см. в [Devlin et al. (2019)] и [Liu et al. (2019)].
+
+### Данные для предобучения
+
+Мы используем набор данных для предобучения объемом 80 ГБ, состоящий из несжатых текстов; в нем содержится 850 миллионов твитов (16 миллиардов словесных токенов). Каждый твит включает от 10 до 64 словесных токенов. Данный набор данных представляет собой объединение двух корпусов.
+
+Затем мы применяем `fastBPE` ([Sennrich et al., 2016]) для разбиения всех 850 миллионов твитов на субсловные единицы, используя словарь, содержащий 64 тысячи таких единиц. В среднем на один твит приходится 25 субсловных токенов.
+
+### Оптимизация
+
+Мы используем реализацию RoBERTa из библиотеки `fairseq` ([Ott et al., 2019]). Мы установили максимальную длину последовательности на уровне 128, в результате чего было сгенерирово 850 миллионов $\times$ 25 / 128 $\approx$ 166 миллионов блоков последовательностей. Согласно [Liu et al. (2019)], мы оптимизируем модель с помощью алгоритма Адам ([Kingma and Ba, 2014]); размер пакета составляет 7 тысяч элементов, обработка выполняется на 8 графических процессорах V100 (каждый объемом 32 ГБ). Максимальный уровень скорости обучения при этом равен 0.0004. Мы проводим предварительное обучение модели BERTweet в течение 40 эпох, что занимает примерно 4 недели (в ходе первых двух эпох происходит постепенное увеличение скорости обучения); в итоге выполняется 166 миллионов $\times$ 40 / 7 тысяч $\approx$ 950 тысяч шагов обучения.
+
+## Экспериментальная установка
+
+Мы оцениваем и сравниваем эффективность BERTweet по сравнению с надежными базовыми моделями на трех последующих задачах обработки естественного языка: определению частей речи, распознаванию именованных сущностей и классификации текстов, используя стандартные наборы данных твитов.
+
+### Наборы данных для прикладных задач (downstream task)
+
+Для задачи разметки частей речи мы используем три набора данных: Ritter11-T-POS [Ritter et al. (2011)], ARK-Twitter44 [https://code.google.com/archive/p/ark-tweet-nlp/downloads](https://code.google.com/archive/p/ark-tweet-nlp/downloads) (twpos-data-v0.3.tgz) ([Gimpel et al., 2011]; [Owoputi et al., 2013]) и Tweebank-v255 [https://github.com/Oneplus/Tweebank](https://github.com/Oneplus/Tweebank) ([Liu et al., 2018]). Для задачи распознавания именованных сущностей применяются наборы данных из совместной задачи WNUT16 по распознаванию именованных сущностей ([Strauss et al., 2016]) и из совместной задачи WNUT17 по распознаванию новых и возникающих сущностей ([Derczynski et al., 2017]). Для классификации текстов используются два набора данных: набор данных для анализа тональности с тремя классами из задачи SemEval2017 Task 4A ([Rosenthal et al., 2017]) и набор данных для определения иронии с двумя классами из задачи SemEval2018 Task 3A ([Van Hee et al., 2018]).
+
+Для набора данных Ritter11-T-POS мы используем заранее подготовленное разделение на обучающую, валидационную и тестовую выборки в соотношении 70/15/15, предоставленное на [Gui et al. (2017)].66 [https://github.com/guitaowufeng/TPANN](https://github.com/guitaowufeng/TPANN). В наборе данных ARK-Twitter содержатся два файла: `daily547.conll` и `oct27.conll`; при этом `oct27.conll` дополнительно разделяется на файлы `oct27.traindev` и `oct27.test`. Согласно [Owoputi et al. (2013)] и [Gui et al. (2017)], в качестве тестового набора мы используем `daily547.conll`. Кроме того, в качестве обучающей и валидационной выборок применяются соответственно `oct27.traindev` и `oct27.test`. Что касается наборов данных Tweebank-v2, WNUT16 и WNUT17, то мы используем их стандартное разделение на обучающую, валидационную и тестовую части. Наборы данных SemEval2017-Task4A и SemEval2018-Task3A предоставляются лишь с обучающей и тестовой выборками (стандартного разделения на валидационную часть в них нет); поэтому мы выделяем 10% обучающей выборки в качестве валидационной, а оставшиеся 90% используем для обучения.
+
+Мы применяем «мягкую» стратегию нормализации ко всем экспериментальным наборам данных: слова, относящиеся к упоминаниям пользователей, а также веб-ссылки преобразуются в специальные токены `@USER` и `HTTPURL` соответственно; токены с эмодзи также заменяются на соответствующие строковые представления. Кроме того, используется «жесткая» стратегия нормализации: применяются словари лексической нормализации [Aramaki (2010)]; [Liu et al. (2012)]; [Han et al. (2012)] для обработки слововых токенов в твитах.
+
+### Дообучение (fine-tuning)
+
+Следуя подходу [Devlin et al. (2019)], для определения частей речи и распознавания именованных сущностей мы добавляем линейный прогнозирующий слой поверх последнего Transformer слоя в BERTweet, используя при этом первый субсловный элемент каждого токена. Что касается классификации текстов, то здесь линейный прогнозирующий слой добавляется поверх агрегированного выходного вектора.
+
+Мы используем библиотеку `transformers` [Wolf et al. (2019)] для независимой дообучения модели BERTweet под каждую задачу и каждый набор данных в течение 30 эпох обучения. Для оптимизации применяется алгоритм AdamW ([Loshchilov and Hutter, 2019]) с фиксированной скоростью обучения 1.e-5 и размером пакета 32 ([Liu et al., 2019]). После каждой эпохи обучения мы оцениваем качество работы модели на валидационном наборе (в случае отсутствия улучшений в течение 5 последовательных эпох применяется ранняя остановка обучения); затем выбирается наилучшая версия модели для расчета итогового показателя качества на тестовом наборе.
+
+Мы повторяем процесс дообучения 5 раз, используя различные случайные зерна; то есть проводится по 5 запусков для каждой задачи и каждого набора данных. В качестве итогового результата на тестовом наборе указывается среднее значение тестовых оценок, полученных за все 5 запусков.
+
+### Базовые модели
+
+Наши основные конкуренты — это предобученные языковые модели RoBERTabase ([Liu et al., 2019]) и XLM-Rbase ([Conneau et al., 2020]), имеющие такую же архитектуру, как и наша модель BERTweet. Кроме того, мы также проводим тестирование предобученных моделей RoBERTalarge и XLM-Rlarge; однако такое сравнение не является корректным из-за значительно больших размеров этих моделей.
+
+Предобученная модель RoBERTa представляет собой мощную языковую модель для английского языка; она обучалась на 160 ГБ текстов, включающих книги, Википедию, новости из CommonCrawl, рассказы из CommonCrawl и прочий веб-контент. XLM-R является межъязыковым вариантом модели RoBERTa; она обучалась на 2.5 ТБ мультиязычного корпуса, в состав которого входит 301 ГБ английских текстов из CommonCrawl.
+
+Мы проводим дообучение моделей RoBERTa и XLM-R, используя тот же подход дообучения, что и для BERTweet.
+
+Результаты точности POS-тегирования на тестовых наборах Ritter11-T-POS (Ritter11), ARK-Twitter (ARK) и Tweebank-v2 (TB-v2). Результаты работы ARKtagger [Owoputi et al. (2013)] на наборе Ritter11 приводятся в статье [Gui et al. (2017)]. Следует отметить, что в Ritter11 для токенов типа retweeted (RT), названий пользовательских аккаунтов, хэштегов и URL используются специфические для Твиттера POS-теги; их можно идеально определить с помощью простых регулярных выражений. Поэтому мы следуем рекомендациям [Gui et al. (2017)] и [Gui et al. (2018)] для корректного тегирования этих слов во всех моделях. Результаты работы ARKtagger и BiLSTM-CNN-CRF [Ma and Hovy (2016)] на наборе TB-v2 описаны в работе [Liu et al. (2018)]. Кроме того, обозначения “+a”, “+b” и “+c” указывают на использование дополнительных обучающих данных, то есть на модели, обученные на более объемных наборах данных. “+a”: использование дополнительных POS-аннотированных данных из разделов 00-24 английского корпуса WSJ Penn treebank ([Marcus et al., 1993]). “+b”: использование как обучающего, так и валидационного наборов для обучения моделей. “+c”: использование дополнительных POS-аннотированных данных из обучающего набора UD_English-EWT ([Silveira et al., 2014]).
+
+Значения метрики F1 на тестовых наборах WNUT16 и WNUT17. Результаты работы модели CambridgeLTL приводятся в работе [Limsopatham and Collier (2016)]. Показатели «entity» и «surface» соответствуют значениям метрики, вычисленным на стандартном уровне сущностей и на поверхностном уровне ([Derczynski et al., 2017]) соответственно.
+
+Результаты оценки производительности на тестовом наборе SemEval2017-Task4A. Определения метрик AvgRec и F1${}^{\text{NP}}$ приведены в [Rosenthal et al. (2017)]; при этом AvgRec является основной метрикой для ранжирования.
+
+Результаты оценки на тестовом наборе SemEval2018-Task3A. F1${}^{\text{pos}}$ — основной метрический показатель ранжирования — представляет собой значение метрики F1, рассчитанное для положительного класса.
+
+## Экспериментальные результаты
+
+### Основные результаты
+
+В таблицах 1, 2, 3 и 4 приведены полученные нами оценки для BERTweet и базовых моделей при использовании как «мягких», так и «жестких» стратегий нормализации. Мы установили, что для каждой предобученной языковой модели показатели, полученные при применении «мягкой» нормализации, в среднем выше соответствующих показателей при «жесткой» нормализации. Это означает, что использование словарей лексической нормализации для обработки слов в твиттах, как правило, не способствует повышению эффективности предобученных языковых моделей при решении прикладных задач.
+
+Наша модель BERTweet превосходит основных конкурентов — RoBERTabase и XLM-Rbase — на всех экспериментальных наборах данных (за единственным исключением: на наборе Ritter11-T-POS модель XLM-Rbase показывает немного лучшие результаты, чем BERTweet). В сравнении с моделями RoBERTalarge и XLM-Rlarge, имеющими значительно большие параметры, мы отмечаем, что они демонстрируют более высокие показатели по задачам разметки частей речи и распознавания именованных сущностей, чем BERTweet. Тем не менее, модель BERTweet показывает лучшие результаты, чем эти крупные модели, на двух наборах данных для классификации текстов.
+
+В таблицах 1, 2, 3 и 4 также приводится сравнение полученных нами результатов с ранее зафиксированными наивысшими показателями на тех же тестовых наборах. Очевидно, что предобученные языковые модели способствуют достижению новых рекордных результатов на всех экспериментальных наборах данных. В частности, модель BERTweet улучшает предыдущий рекордный показатель в задаче распознавания новых и вновь появляющихся сущностей на 14 и более на наборе данных WNUT17; кроме того, в задачах классификации текстов она повышает точность на 5% и 4% на тестовых наборах SemEval2017-Task4A и SemEval2018-Task3A соответственно. Полученные нами результаты подтверждают эффективность масштабной **BERTweet** для обработки твитов с использованием методов обработки естественного языка.
+
+### Обсуждение
+
+Полученные нами результаты сравнения «мягких» и «жестких» стратегий нормализации применительно к предобученным языковым моделям подтверждают ранее высказанное мнение о том, что лексическая нормализация твитов представляет собой задачу перевода с потерями информации [Owoputi et al. (2013)]. Мы установили, что RoBERTa показывает лучшие результаты, чем XLM-R на наборах данных для классификации текстов. Этот вывод согласуется с данными из статьи об XLM-R ([Conneau et al., 2020]), где XLM-R демонстрирует более низкие показатели эффективности по сравнению с RoBERTa при решении задач классификации последовательностей на традиционных письменных корпусах английского языка.
+
+Также напомним: хотя RoBERTa и XLM-R используют в 160 / 80 = 2 раза и 301 / 80 $\approx$ 3.75 раза больше английских данных, чем наш BERTweet, BERTweet всё же лучше конкурентов RoBERTabase и XLM-Rbase. Это подтверждает эффективность крупной доменной предобученной языковой модели для английских твитов. В будущей работе мы выпустим «large»-версию BERTweet, которая, возможно, превзойдёт RoBERTalarge и XLM-Rlarge на всех трёх задачах оценки.
+
+## Заключение
+
+Мы представили первую крупномасштабную языковую модель BERTweet, предварительно обученную на английских твитах. Мы продемонстрировали полезность использования BERTweet, показав, что BERTweet превосходит свои базовые модели RoBERTabase и XLM-Rbase, а также способствует достижению более высоких результатов по сравнению с ранее существовавшими SOTA-моделями в трех задачах обработки английских твитов: разметке частей речи, распознавании именованных сущностей и классификации текста (то есть анализе тональности и распознавании иронии).
+
+По состоянию на сентябрь 2020 года мы собрали корпус, содержащий примерно 23 миллиона англоязычных твитов о COVID-19 с учетом регистра букв; в каждом твите содержится от 10 до 64 слов. Кроме того, мы создали версию этого корпуса без учета регистра букв. Затем мы продолжаем **предобучение** модели BERTweet на каждом из этих корпусов в течение еще 40 эпох; в результате получаются две разновидности предобученных моделей *BERTweet-COVID19* — с учетом регистра и без учета регистра, обозначаемые как BERTweet. Предоставляя в открытый доступ модель BERTweet и обе ее разновидности, мы надеемся способствовать дальнейшим исследованиям и разработкам в области анализа твитов; в частности, для задач выявления информативных твитов о COVID-19 [Nguyen et al. (2020)] и извлечения из твитов сведений о событиях, связанных с COVID-19 [Zong et al. (2020)].
+
+## Список литературы
+
+Aguilar et al. (2017) Aguilar et al. (2017) Gustavo Aguilar, Suraj Maharjan, Adrian Pastor López-Monroy, and Thamar Solorio. 2017. A Multi-task Approach for Named Entity Recognition in Social Media Data. In Proceedings of WNUT, pages 148–153.
+Aramaki (2010) Aramaki (2010) Eiji Aramaki. 2010. TYPO CORPUS. http://luululu.com/tweet/.
+Baziotis et al. (2018) Baziotis et al. (2018) Christos Baziotis, Athanasiou Nikolaos, Pinelopi Papalampidi, Athanasia Kolovou, Georgios Paraskevopoulos, Nikolaos Ellinas, and Alexandros Potamianos. 2018. NTUA-SLP at SemEval-2018 task 3: Tracking ironic tweets using ensembles of word and character level attentive RNNs. In Proceedings of SemEval, pages 613–621.
+Baziotis et al. (2017) Baziotis et al. (2017) Christos Baziotis, Nikos Pelekis, and Christos Doulkeridis. 2017. DataStories at SemEval-2017 task 4: Deep LSTM with attention for message-level and topic-based sentiment analysis. In Proceedings of SemEval, pages 747–754.
+Beltagy et al. (2019) Beltagy et al. (2019) Iz Beltagy, Kyle Lo, and Arman Cohan. 2019. SciBERT: A pretrained language model for scientific text. In Proceedings of EMNLP-IJCNLP, pages 3615–3620.
+Bird et al. (2009) Bird et al. (2009) Steven Bird, Ewan Klein, and Edward Loper, editors. 2009. Natural language processing with Python. O’Reilly.
+Cliche (2017) Cliche (2017) Mathieu Cliche. 2017. BB_twtr at SemEval-2017 task 4: Twitter sentiment analysis with CNNs and LSTMs. In Proceedings of SemEval, pages 573–580.
+Conneau et al. (2020) Conneau et al. (2020) Alexis Conneau, Kartikay Khandelwal, Naman Goyal, Vishrav Chaudhary, Guillaume Wenzek, Francisco Guzmán, Edouard Grave, Myle Ott, Luke Zettlemoyer, and Veselin Stoyanov. 2020. Unsupervised Cross-lingual Representation Learning at Scale. In Proceedings of ACL, page to appear.
+Derczynski et al. (2017) Derczynski et al. (2017) Leon Derczynski, Eric Nichols, Marieke van Erp, and Nut Limsopatham. 2017. Results of the WNUT2017 Shared Task on Novel and Emerging Entity Recognition. In Proceedings of WNUT, pages 140–147.
+Devlin et al. (2019) Devlin et al. (2019) Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. BERT: Pre-training of deep bidirectional transformers for language understanding. In Proceedings of NAACL, pages 4171–4186.
+Eisenstein (2013) Eisenstein (2013) Jacob Eisenstein. 2013. What to do about bad language on the internet. In Proceedings of NAACL-HLT, pages 359–369.
+Ghani et al. (2019) Ghani et al. (2019) Norjihan Abdul Ghani, Suraya Hamid, Ibrahim Abaker Targio Hashem, and Ejaz Ahmed. 2019. Social media big data analytics: A survey. Comput. Hum. Behav., 101:417–428.
+Gimpel et al. (2011) Gimpel et al. (2011) Kevin Gimpel, Nathan Schneider, Brendan O’Connor, Dipanjan Das, Daniel Mills, Jacob Eisenstein, Michael Heilman, Dani Yogatama, Jeffrey Flanigan, and Noah A. Smith. 2011. Part-of-Speech Tagging for Twitter: Annotation, Features, and Experiments. In Proceedings of ACL-HLT, pages 42–47.
+Gui et al. (2018) Gui et al. (2018) Tao Gui, Qi Zhang, Jingjing Gong, Minlong Peng, Di Liang, Keyu Ding, and Xuanjing Huang. 2018. Transferring from Formal Newswire Domain with Hypernet for Twitter POS Tagging. In Proceedings of EMNLP, pages 2540–2549.
+Gui et al. (2017) Gui et al. (2017) Tao Gui, Qi Zhang, Haoran Huang, Minlong Peng, and Xuanjing Huang. 2017. Part-of-Speech Tagging for Twitter with Adversarial Neural Networks. In Proceedings of EMNLP, pages 2411–2420.
+Gururangan et al. (2020) Gururangan et al. (2020) Suchin Gururangan, Ana Marasović, Swabha Swayamdipta, Kyle Lo, Iz Beltagy, Doug Downey, and Noah A. Smith. 2020. Don’t Stop Pretraining: Adapt Language Models to Domains and Tasks. In Proceedings of ACL, pages 8342–8360.
+Han et al. (2012) Han et al. (2012) Bo Han, Paul Cook, and Timothy Baldwin. 2012. Automatically Constructing a Normalisation Dictionary for Microblogs. In Proceedings of EMNLP-CoNLL, pages 421–432.
+Han et al. (2013) Han et al. (2013) Bo Han, Paul Cook, and Timothy Baldwin. 2013. Lexical Normalization for Social Media Text. ACM Transactions on Intelligent Systems and Technology, 4(1).
+Joulin et al. (2017) Joulin et al. (2017) Armand Joulin, Edouard Grave, Piotr Bojanowski, and Tomas Mikolov. 2017. Bag of tricks for efficient text classification. In Proceedings of EACL, pages 427–431.
+Kingma and Ba (2014) Kingma and Ba (2014) Diederik P. Kingma and Jimmy Ba. 2014. Adam: A Method for Stochastic Optimization. arXiv preprint, arXiv:1412.6980.
+Lee et al. (2019) Lee et al. (2019) Jinhyuk Lee, Wonjin Yoon, Sungdong Kim, Donghyeon Kim, Sunkyu Kim, Chan Ho So, and Jaewoo Kang. 2019. BioBERT: a pre-trained biomedical language representation model for biomedical text mining. Bioinformatics, page btz682.
+Limsopatham and Collier (2016) Limsopatham and Collier (2016) Nut Limsopatham and Nigel Collier. 2016. Bidirectional LSTM for Named Entity Recognition in Twitter Messages. In Proceedings of WNUT, pages 145–152.
+Liu et al. (2012) Liu et al. (2012) Fei Liu, Fuliang Weng, and Xiao Jiang. 2012. A Broad-Coverage Normalization System for Social Media Language. In Proceedings of ACL, pages 1035–1044.
+Liu et al. (2018) Liu et al. (2018) Yijia Liu, Yi Zhu, Wanxiang Che, Bing Qin, Nathan Schneider, and Noah A. Smith. 2018. Parsing Tweets into Universal Dependencies. In Proceedings of NAACL-HLT, pages 965–975.
+Liu et al. (2019) Liu et al. (2019) Yinhan Liu, Myle Ott, Naman Goyal, Jingfei Du, Mandar Joshi, Danqi Chen, Omer Levy, Mike Lewis, Luke Zettlemoyer, and Veselin Stoyanov. 2019. RoBERTa: A Robustly Optimized BERT Pretraining Approach. arXiv preprint, arXiv:1907.11692.
+Loshchilov and Hutter (2019) Loshchilov and Hutter (2019) Ilya Loshchilov and Frank Hutter. 2019. Decoupled Weight Decay Regularization. In Proceedings of ICLR.
+Ma and Hovy (2016) Ma and Hovy (2016) Xuezhe Ma and Eduard Hovy. 2016. End-to-end sequence labeling via bi-directional LSTM-CNNs-CRF. In Proceedings of ACL, pages 1064–1074.
+Marcus et al. (1993) Marcus et al. (1993) Mitchell P. Marcus, Beatrice Santorini, and Mary Ann Marcinkiewicz. 1993. Building a Large Annotated Corpus of English: The Penn Treebank. Computational Linguistics, 19(2):313–330.
+Nguyen et al. (2020) Nguyen et al. (2020) Dat Quoc Nguyen, Thanh Vu, Afshin Rahimi, Mai Hoang Dao, Linh The Nguyen, and Long Doan. 2020. WNUT-2020 Task 2: Identification of Informative COVID-19 English Tweets. In Proceedings of WNUT.
+Ott et al. (2019) Ott et al. (2019) Myle Ott, Sergey Edunov, Alexei Baevski, Angela Fan, Sam Gross, Nathan Ng, David Grangier, and Michael Auli. 2019. fairseq: A Fast, Extensible Toolkit for Sequence Modeling. In Proceedings of NAACL-HLT 2019: Demonstrations, pages 48–53.
+Owoputi et al. (2013) Owoputi et al. (2013) Olutobi Owoputi, Brendan O’Connor, Chris Dyer, Kevin Gimpel, Nathan Schneider, and Noah A. Smith. 2013. Improved Part-of-Speech Tagging for Online Conversational Text with Word Clusters. In Proceedings of NAACL-HLT, pages 380–390.
+Ritter et al. (2011) Ritter et al. (2011) Alan Ritter, Sam Clark, Mausam, and Oren Etzioni. 2011. Named Entity Recognition in Tweets: An Experimental Study. In Proceedings of EMNLP, pages 1524–1534.
+Rosenthal et al. (2017) Rosenthal et al. (2017) Sara Rosenthal, Noura Farra, and Preslav Nakov. 2017. SemEval-2017 Task 4: Sentiment Analysis in Twitter. In Proceedings of SemEval, pages 502–518.
+Sennrich et al. (2016) Sennrich et al. (2016) Rico Sennrich, Barry Haddow, and Alexandra Birch. 2016. Neural Machine Translation of Rare Words with Subword Units. In Proceedings of ACL, pages 1715–1725.
+Silveira et al. (2014) Silveira et al. (2014) Natalia Silveira, Timothy Dozat, Marie-Catherine de Marneffe, Samuel Bowman, Miriam Connor, John Bauer, and Christopher D. Manning. 2014. A gold standard dependency corpus for English. In Proceedings of LREC.
+Strauss et al. (2016) Strauss et al. (2016) Benjamin Strauss, Bethany Toma, Alan Ritter, Marie-Catherine de Marneffe, and Wei Xu. 2016. Results of the WNUT16 Named Entity Recognition Shared Task. In Proceedings of WNUT, pages 138–144.
+Van Hee et al. (2018) Van Hee et al. (2018) Cynthia Van Hee, Els Lefever, and Véronique Hoste. 2018. SemEval-2018 Task 3: Irony Detection in English Tweets. In Proceedings of SemEval, pages 39–50.
+Vaswani et al. (2017) Vaswani et al. (2017) Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. 2017. Attention is All you Need. In Advances in Neural Information Processing Systems 30, pages 5998–6008.
+Wolf et al. (2019) Wolf et al. (2019) Thomas Wolf, Lysandre Debut, Victor Sanh, Julien Chaumond, Clement Delangue, Anthony Moi, Pierric Cistac, Tim Rault, R’emi Louf, Morgan Funtowicz, and Jamie Brew. 2019. HuggingFace’s Transformers: State-of-the-art Natural Language Processing. arXiv preprint, arXiv:1910.03771.
+Wu et al. (2018) Wu et al. (2018) Chuhan Wu, Fangzhao Wu, Sixing Wu, Junxin Liu, Zhigang Yuan, and Yongfeng Huang. 2018. THU_NGN at SemEval-2018 task 3: Tweet irony detection with densely connected LSTM and multi-task learning. In Proceedings of SemEval, pages 51–56.
+Zhou et al. (2019) Zhou et al. (2019) Joey Tianyi Zhou, Hao Zhang, Di Jin, Hongyuan Zhu, Meng Fang, Rick Siow Mong Goh, and Kenneth Kwok. 2019. Dual Adversarial Neural Transfer for Low-Resource Named Entity Recognition. In Proceedings of ACL, pages 3461–3471.
+Zong et al. (2020) Zong et al. (2020) Shi Zong, Ashutosh Baheti, Wei Xu, and Alan Ritter. 2020. Extracting COVID-19 Events from Twitter. arXiv preprint, arXiv:2006.02567.
