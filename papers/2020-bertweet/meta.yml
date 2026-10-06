@@ -1,0 +1,15 @@
+title: "BERTweet: A pre-trained language model for English Tweets"
+authors:
+  - "Dat Quoc Nguyen"
+  - "Thanh Vu"
+  - "Anh Tuan Nguyen"
+doi: "10.18653/v1/2020.findings-emnlp.196"
+arxiv: "2005.10200"
+journal: "EMNLP Findings"
+year: 2020
+license: "CC BY 4.0"
+status: "not-started"
+zenodo-doi: ""
+
+topics:
+  - transformers

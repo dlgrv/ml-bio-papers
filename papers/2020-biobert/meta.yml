@@ -1,0 +1,20 @@
+title: "BioBERT: a pre-trained biomedical language representation model for biomedical text mining"
+authors:
+  - "Jinhyuk Lee"
+  - "Wonjin Yoon"
+  - "Sungdong Kim"
+  - "Donghyeon Kim"
+  - "Sunkyu Kim"
+  - "Chan Ho So"
+  - "Jaewoo Kang"
+doi: "10.1093/bioinformatics/btz682"
+pmcid: "PMC7703786"
+arxiv: "1901.08746"
+journal: "Bioinformatics"
+year: 2020
+license: "CC BY 4.0"
+status: "not-started"
+zenodo-doi: ""
+
+topics:
+  - transformers
