@@ -123,6 +123,33 @@ def difficulty_suffix(n: int | None, note: str = "") -> str:
     return f"{META_SEP}{difficulty_html(n, note)}"
 
 
+_MD_BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
+_MD_CODE_RE = re.compile(r"`([^`]+)`")
+
+
+def plain_title(text: str) -> str:
+    """Strip markdown bold/code wrappers that must not appear in page titles."""
+    t = text.strip()
+    prev = None
+    while prev != t:
+        prev = t
+        t = _MD_BOLD_RE.sub(r"\1", t)
+        t = _MD_CODE_RE.sub(r"\1", t)
+    return t.strip()
+
+
+def split_paper_title(md: str, meta: dict) -> tuple[str, str]:
+    """Level-1 `# …` title (plain) and the rest of the markdown body."""
+    lines = md.split("\n")
+    for i, line in enumerate(lines):
+        if line.startswith("# ") and not line.startswith("##"):
+            title = plain_title(line[2:])
+            body = "\n".join(lines[:i] + lines[i + 1 :]).lstrip("\n")
+            return title, body
+    fallback = plain_title(str(meta.get("title") or ""))
+    return fallback, md.lstrip("\n")
+
+
 def load_papers(root: Path) -> list[Paper]:
     papers = []
     for d in sorted((root / "papers").iterdir()):
@@ -136,13 +163,13 @@ def load_papers(root: Path) -> list[Paper]:
         if not index.exists():
             continue
         md = index.read_text(encoding="utf-8")
-        title, _, body = md.partition("\n")
+        title, body = split_paper_title(md, meta)
         papers.append(
             Paper(
                 check_slug(d.name),
-                title.lstrip("# ").strip(),
+                title,
                 meta,
-                body.lstrip("\n"),
+                body,
                 (d / "index.pdf").exists(),
             )
         )

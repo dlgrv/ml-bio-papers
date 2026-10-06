@@ -9,12 +9,26 @@ Usage: render_md.py <slug> [--original]
 from __future__ import annotations
 
 import json
+import re
 import sys
 
 from translate.lib import mask
 from translate.lib.paths import work_dir
 
 RU_LABELS = {"Fig.": "Рис.", "Figure": "Рис."}
+_MD_BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
+_MD_CODE_RE = re.compile(r"`([^`]+)`")
+
+
+def _plain_title_markup(text: str) -> str:
+    """Drop bold/code wrappers from paper titles (shown as plain H1 on the site)."""
+    t = text
+    prev = None
+    while prev != t:
+        prev = t
+        t = _MD_BOLD_RE.sub(r"\1", t)
+        t = _MD_CODE_RE.sub(r"\1", t)
+    return t
 
 
 def _titles(units: list[dict], texts: dict[str, str]) -> dict[str, str]:
@@ -70,6 +84,8 @@ def render(units: list[dict], texts: dict[str, str], *, original: bool) -> str:
         body = _body(u, texts, titles, original=original)
         kind = u["kind"]
         if kind in {"title", "heading"}:
+            if kind == "title":
+                body = _plain_title_markup(body)
             blocks.append(f"{'#' * u['level']} {body}")
         elif kind == "figure":
             blocks.append(_figure_block(u, body, original=original))

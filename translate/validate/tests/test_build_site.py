@@ -196,6 +196,31 @@ def test_titles_are_html_escaped(tmp_path):
     assert "A &lt;b&gt; &amp; C" in (tmp_path / "out" / "index.html").read_text(encoding="utf-8")
 
 
+def test_title_strips_markdown_bold_and_code(tmp_path):
+    _paper(tmp_path, "2019-a")
+    (tmp_path / "papers" / "2019-a" / "index.md").write_text(
+        "# **BERT**: and `YACHT` name\n\n## S\n\nt\n", encoding="utf-8"
+    )
+    build_site.build(tmp_path, tmp_path / "out")
+    idx = (tmp_path / "out" / "index.html").read_text(encoding="utf-8")
+    page = (tmp_path / "out" / "2019-a" / "index.html").read_text(encoding="utf-8")
+    assert "BERT: and YACHT name" in idx
+    assert "<h1>BERT: and YACHT name</h1>" in page
+    assert "**BERT**" not in page
+    assert "`YACHT`" not in page
+
+
+def test_missing_h1_falls_back_to_meta_title(tmp_path):
+    _paper(tmp_path, "2019-a")
+    (tmp_path / "papers" / "2019-a" / "index.md").write_text(
+        "## Аннотация\n\nТекст.\n", encoding="utf-8"
+    )
+    build_site.build(tmp_path, tmp_path / "out")
+    page = (tmp_path / "out" / "2019-a" / "index.html").read_text(encoding="utf-8")
+    assert "<h1>Orig</h1>" in page
+    assert "Аннотация" in page
+
+
 def test_bad_slug_directory_is_rejected(tmp_path):
     _paper(tmp_path, "BadSlug")
     with pytest.raises(ValueError, match="bad slug"):
