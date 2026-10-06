@@ -63,7 +63,7 @@ def test_missing_pmcid_in_meta(tmp_path):
     meta = tmp_path / "papers" / "2019-kraken2"
     meta.mkdir(parents=True)
     (meta / "meta.yml").write_text("title: x\n", encoding="utf-8")
-    with pytest.raises(ValueError, match="pmcid or arxiv"):
+    with pytest.raises(ValueError, match="pmcid, arxiv, or pdf"):
         fj.fetch("2019-kraken2", root=str(tmp_path))
 
 

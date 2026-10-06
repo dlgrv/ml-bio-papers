@@ -31,11 +31,18 @@ PREAMBLE = """#set page(paper: "a4", margin: (x: 18mm, y: 20mm), numbering: "1")
 def header(meta: dict) -> str:
     """Minimal attribution note above the translated body."""
     authors = ", ".join(meta["authors"])
-    doi = meta["doi"]
+    doi = (meta.get("doi") or "").strip()
+    pdf = (meta.get("pdf") or meta.get("url") or "").strip()
+    if doi:
+        loc = f"DOI: [{doi}](https://doi.org/{doi})"
+    elif pdf:
+        loc = f"PDF: [{pdf}]({pdf})"
+    else:
+        loc = "Источник: см. meta.yml"
     return (
         f"> **Неофициальный перевод.** Оригинал: {authors}. «{meta['title']}». "
         f"{meta['journal']}, {meta['year']}. "
-        f"DOI: [{doi}](https://doi.org/{doi}). Лицензия: {meta['license']}.\n\n"
+        f"{loc}. Лицензия: {meta['license']}.\n\n"
     )
 
 

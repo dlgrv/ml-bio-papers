@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Download paper XML into translate/runs/<slug>/source.xml.
 
-Source is `pmcid` (PMC JATS via E-utilities) or `arxiv` (LaTeXML HTML → JATS)
-from papers/<slug>/meta.yml.
+Source is `pmcid` (PMC JATS via E-utilities), `arxiv` (LaTeXML HTML → JATS),
+or `pdf` (HTTPS PDF URL → heuristic JATS) from papers/<slug>/meta.yml.
 Usage: fetch_jats.py <slug>
 """
 
@@ -18,7 +18,8 @@ from defusedxml.ElementTree import ParseError, fromstring
 
 from translate.lib.http import download
 from translate.lib.latexml_jats import html_to_jats
-from translate.lib.paths import meta_yml, source_xml
+from translate.lib.paths import assets_dir, meta_yml, source_xml
+from translate.lib.pdf_jats import write_pdf_bundle
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -64,14 +65,22 @@ def fetch(slug: str, root: str | None = None) -> Path:
     meta = yaml.safe_load(meta_yml(slug, root).read_text(encoding="utf-8")) or {}
     pmcid = meta.get("pmcid")
     arxiv = meta.get("arxiv")
+    pdf = meta.get("pdf")
+    out = source_xml(slug, root)
     if pmcid:
         data = download(efetch_url(str(pmcid)))
     elif arxiv:
         data = _from_arxiv_html(download(arxiv_html_url(str(arxiv))))
+    elif pdf:
+        url = str(pdf).strip()
+        if not url.startswith("https://"):
+            raise ValueError(f"{meta_yml(slug, root)}: pdf must be an https URL")
+        write_pdf_bundle(download(url), out, assets_dir(slug, root))
+        validate(out.read_bytes())
+        return out
     else:
-        raise ValueError(f"{meta_yml(slug, root)}: no pmcid or arxiv")
+        raise ValueError(f"{meta_yml(slug, root)}: no pmcid, arxiv, or pdf")
     validate(data)
-    out = source_xml(slug, root)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = out.with_suffix(".xml.tmp")
     tmp.write_bytes(data)
