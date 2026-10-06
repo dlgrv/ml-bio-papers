@@ -1,0 +1,19 @@
+title: "Improving Language Understanding by Generative Pre-Training"
+authors:
+  - "Alec Radford"
+  - "Karthik Narasimhan"
+  - "Tim Salimans"
+  - "Ilya Sutskever"
+doi: ""
+pdf: "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf"
+journal: "OpenAI"
+year: 2018
+license: "All rights reserved (see original PDF)"
+status: "machine-translated"
+zenodo-doi: ""
+
+topics:
+  - transformers
+
+difficulty: 7
+difficulty_note: "Небольшая статья."
