@@ -6,7 +6,7 @@ Unofficial translations and structured summaries of scientific ML papers — met
 
 Every translation states its original source (DOI), the license it is made under, and its review status: machine translation, machine translation + LLM review, or human-verified.
 
-![Papers](https://img.shields.io/badge/Papers-8-3451b2?style=flat-square)
+![Papers](https://img.shields.io/badge/Papers-9-3451b2?style=flat-square)
 ![License of translations](https://img.shields.io/badge/Translations-CC%20BY%204.0-18794e?style=flat-square)
 ![Originals](https://img.shields.io/badge/Originals-Open%20access-915930?style=flat-square)
 
@@ -30,6 +30,7 @@ Every translation states its original source (DOI), the license it is made under
 | 2019 | BERT | NAACL-HLT | [10.18653/v1/N19-1423](https://doi.org/10.18653/v1/N19-1423) | [arXiv](https://arxiv.org/abs/1810.04805) | CC BY 4.0 | machine-translated |
 | 2019 | Kraken 2 | Genome Biology | [10.1186/s13059-019-1891-0](https://doi.org/10.1186/s13059-019-1891-0) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC6883579/) | CC BY 4.0 | machine-translated |
 | 2019 | XLNet | NeurIPS | [10.48550/arXiv.1906.08237](https://doi.org/10.48550/arXiv.1906.08237) | [arXiv](https://arxiv.org/abs/1906.08237) | arXiv perpetual non-exclusive | machine-translated |
+| 2020 | T5 | JMLR | [10.48550/arXiv.1910.10683](https://doi.org/10.48550/arXiv.1910.10683) | [arXiv](https://arxiv.org/abs/1910.10683) | CC BY 4.0 | machine-translated |
 | 2023 | MetaPhlAn 4 | Nature Biotechnology | [10.1038/s41587-023-01688-w](https://doi.org/10.1038/s41587-023-01688-w) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC10635831/) | CC BY 4.0 | machine-translated |
 | 2024 | Taxometer | Nature Communications | [10.1038/s41467-024-52771-y](https://doi.org/10.1038/s41467-024-52771-y) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC11437175/) | CC BY 4.0 | machine-translated |
 | 2024 | YACHT | Bioinformatics | [10.1093/bioinformatics/btae047](https://doi.org/10.1093/bioinformatics/btae047) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC10868342/) | CC BY 4.0 | machine-translated |
