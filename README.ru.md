@@ -6,7 +6,7 @@
 
 Каждый перевод указывает оригинал (DOI), лицензию, под которой он сделан, и статус проверки: машинный перевод, машинный перевод + проверка второй LLM-моделью или вычитано человеком.
 
-![Papers](https://img.shields.io/badge/Статьи-6-3451b2?style=flat-square)
+![Papers](https://img.shields.io/badge/Статьи-7-3451b2?style=flat-square)
 ![License of translations](https://img.shields.io/badge/Переводы-CC%20BY%204.0-18794e?style=flat-square)
 ![Originals](https://img.shields.io/badge/Оригиналы-Open%20access-915930?style=flat-square)
 
@@ -27,6 +27,7 @@
 
 | Год | Статья | Журнал | Оригинал (DOI) | Полный текст | Лицензия | Статус |
 | --- | --- | --- | --- | --- | --- | --- |
+| 2019 | BERT | NAACL-HLT | [10.18653/v1/N19-1423](https://doi.org/10.18653/v1/N19-1423) | [arXiv](https://arxiv.org/abs/1810.04805) | CC BY 4.0 | machine-translated |
 | 2019 | Kraken 2 | Genome Biology | [10.1186/s13059-019-1891-0](https://doi.org/10.1186/s13059-019-1891-0) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC6883579/) | CC BY 4.0 | machine-translated |
 | 2023 | MetaPhlAn 4 | Nature Biotechnology | [10.1038/s41587-023-01688-w](https://doi.org/10.1038/s41587-023-01688-w) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC10635831/) | CC BY 4.0 | machine-translated |
 | 2024 | Taxometer | Nature Communications | [10.1038/s41467-024-52771-y](https://doi.org/10.1038/s41467-024-52771-y) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC11437175/) | CC BY 4.0 | machine-translated |

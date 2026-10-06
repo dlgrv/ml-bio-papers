@@ -2,7 +2,10 @@
   "terms": [
     "Kraken", "Kraken2", "Bracken", "MetaPhlAn", "MetaPhlAn4", "Taxometer", "Perseus", "YACHT",
     "MMSeqs2", "Centrifuge", "Metabuli", "sourmash", "CLARK", "Kaiju", "DIAMOND", "BLAST",
-    "Mason", "CAMI2", "GTDB", "NCBI", "RefSeq", "GenBank", "FDA-ARGOS", "UniVec", "GitHub"
+    "Mason", "CAMI2", "GTDB", "NCBI", "RefSeq", "GenBank", "FDA-ARGOS", "UniVec", "GitHub",
+    "BERT", "XLNet", "T5", "GPT", "RoBERTa", "ALBERT", "ELMo",
+    "BioBERT", "SciBERT", "FinBERT", "BERTweet", "mBERT",
+    "GLUE", "SQuAD", "WordPiece", "Transformer", "OpenAI"
   ],
   "patterns": [
     "NC_\\d+(?:\\.\\d+)?",

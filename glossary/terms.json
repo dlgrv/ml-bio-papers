@@ -369,6 +369,109 @@
   "paren_en": "first"
  },
  {
+  "label": "pre-training",
+  "en": [
+   "pre-training"
+  ],
+  "ru": [
+   "предобучение"
+  ],
+  "ru_raw": "предобучение",
+  "note": "",
+  "ru_stems": [
+   "предобучен"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "fine-tuning",
+  "en": [
+   "fine-tuning"
+  ],
+  "ru": [
+   "дообучение"
+  ],
+  "ru_raw": "дообучение",
+  "note": "",
+  "ru_stems": [
+   "дообучен"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "self-attention",
+  "en": [
+   "self-attention"
+  ],
+  "ru": [
+   "самовнимание"
+  ],
+  "ru_raw": "самовнимание",
+  "note": "",
+  "ru_stems": [
+   "самовниман"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "downstream task",
+  "en": [
+   "downstream task"
+  ],
+  "ru": [
+   "прикладная задача"
+  ],
+  "ru_raw": "прикладная задача",
+  "note": "",
+  "ru_stems": [
+   "прикладн",
+   "зада"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "masked language modeling (MLM)",
+  "en": [
+   "masked language modeling",
+   "MLM"
+  ],
+  "ru": [
+   "маскированное языковое моделирование"
+  ],
+  "ru_raw": "маскированное языковое моделирование",
+  "note": "при первом употреблении — MLM",
+  "ru_stems": [
+   "маскированн",
+   "языков",
+   "моделирован"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
+  "label": "next sentence prediction (NSP)",
+  "en": [
+   "next sentence prediction",
+   "NSP"
+  ],
+  "ru": [
+   "предсказание следующего предложения"
+  ],
+  "ru_raw": "предсказание следующего предложения",
+  "note": "при первом употреблении — NSP",
+  "ru_stems": [
+   "предсказан",
+   "следующе",
+   "предложен"
+  ],
+  "gloss": "",
+  "paren_en": "first"
+ },
+ {
   "label": "average nucleotide identity (ANI)",
   "en": [
    "average nucleotide identity",
