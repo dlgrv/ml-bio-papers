@@ -1,0 +1,15 @@
+title: "SciBERT: A Pretrained Language Model for Scientific Text"
+authors:
+  - "Iz Beltagy"
+  - "Kyle Lo"
+  - "Arman Cohan"
+doi: "10.18653/v1/D19-1371"
+arxiv: "1903.10676"
+journal: "EMNLP-IJCNLP"
+year: 2019
+license: "CC BY 4.0"
+status: "not-started"
+zenodo-doi: ""
+
+topics:
+  - transformers

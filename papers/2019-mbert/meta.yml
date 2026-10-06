@@ -1,0 +1,15 @@
+title: "How Multilingual is Multilingual BERT?"
+authors:
+  - "Telmo Pires"
+  - "Eva Schlinger"
+  - "Dan Garrette"
+doi: "10.18653/v1/P19-1493"
+arxiv: "1906.01502"
+journal: "ACL"
+year: 2019
+license: "CC BY 4.0"
+status: "not-started"
+zenodo-doi: ""
+
+topics:
+  - transformers

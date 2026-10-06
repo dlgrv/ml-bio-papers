@@ -1,0 +1,13 @@
+title: "FinBERT: Financial Sentiment Analysis with Pre-trained Language Models"
+authors:
+  - "Dogu Araci"
+doi: "10.48550/arXiv.1908.10063"
+arxiv: "1908.10063"
+journal: "arXiv"
+year: 2019
+license: "arXiv perpetual non-exclusive"
+status: "not-started"
+zenodo-doi: ""
+
+topics:
+  - transformers
