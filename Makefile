@@ -3,7 +3,6 @@
 export PYTHONPATH := $(CURDIR)
 PY = .venv/bin/python3
 RUFF = .venv/bin/ruff
-YAMLLINT = .venv/bin/yamllint
 
 .PHONY: help test lint format ci hooks check-commit-msg glossary-build paper verify status site review
 
@@ -20,7 +19,7 @@ format:  ## Autofix Python (ruff format + check --fix)
 lint:  ## All linters (must match CI and pre-commit)
 	$(RUFF) format --check translate
 	$(RUFF) check translate
-	$(YAMLLINT) .github/workflows/ papers/*/meta.yml topics.yml
+	$(PY) -m yamllint .github/workflows/ papers/*/meta.yml topics.yml
 	$(PY) -m translate.ops.validate_topics
 	shellcheck translate/steps/translate/*.sh
 

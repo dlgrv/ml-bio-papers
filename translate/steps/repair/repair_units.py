@@ -66,7 +66,12 @@ def repair_units(
 
         targets = set(by_unit)
         if "links" in paper_checks:
-            targets |= {u["id"] for u in units.values() if u.get("translate")}
+            for u in units.values():
+                if not u.get("translate"):
+                    continue
+                ru_text = (results.get(u["id"]) or {}).get("text") or ""
+                if vp.extract_links(u["text"]) != vp.extract_links(ru_text):
+                    targets.add(u["id"])
 
         if not targets:
             report["rounds"].append({"round": round_i, "fixed": [], "failed": ["-"]})

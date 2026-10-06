@@ -22,9 +22,11 @@ def _titles(units: list[dict], texts: dict[str, str]) -> dict[str, str]:
     out = {}
     for u in units:
         if u["kind"] == "heading" and u["src_id"]:
-            out[u["src_id"]] = (
-                u["fixed_ru"] if u.get("fixed_ru") else texts.get(u["id"], u["source_md"])
-            )
+            if u.get("fixed_ru"):
+                out[u["src_id"]] = u["fixed_ru"]
+            else:
+                raw = texts.get(u["id"], u["text"])
+                out[u["src_id"]] = mask.unmask(raw, u["spans"], strict=False)
     return out
 
 

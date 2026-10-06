@@ -101,7 +101,10 @@ def load_papers(root: Path) -> list[Paper]:
         meta = yaml.safe_load(meta_path.read_text(encoding="utf-8")) or {}
         if meta.get("status", UNPUBLISHED) == UNPUBLISHED:
             continue
-        md = (d / "index.md").read_text(encoding="utf-8")
+        index = d / "index.md"
+        if not index.exists():
+            continue
+        md = index.read_text(encoding="utf-8")
         title, _, body = md.partition("\n")
         papers.append(
             Paper(

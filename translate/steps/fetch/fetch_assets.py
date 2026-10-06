@@ -15,7 +15,9 @@ from __future__ import annotations
 import os
 import sys
 import urllib.error
+from pathlib import Path
 from typing import TYPE_CHECKING
+from urllib.parse import urljoin
 
 import yaml
 
@@ -23,6 +25,7 @@ from translate.lib.http import download as default_download
 from translate.lib.jsonio import read_json
 from translate.lib.paths import assets_dir, meta_yml, work_dir
 from translate.lib.pmc_media import is_image_bytes, resolve_best_graphics
+from translate.steps.fetch.fetch_jats import arxiv_html_url
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -43,6 +46,27 @@ def collect_graphics(units: list) -> list[str]:
     return names
 
 
+def _write_direct(slug: str, graphics: list[str], root: str | None, dl, url_for) -> int:
+    out_dir = assets_dir(slug, root)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for filename in graphics:
+        dest = out_dir / Path(filename).name
+        url = url_for(filename)
+        try:
+            data = dl(url)
+        except _DOWNLOAD_ERRORS as e:
+            print(f"{slug}: download failed {filename}: {e}", file=sys.stderr)
+            return 1
+        if not is_image_bytes(data):
+            print(f"{slug}: not an image: {filename} from {url}", file=sys.stderr)
+            return 1
+        tmp = dest.with_name(dest.name + ".tmp")
+        tmp.write_bytes(data)
+        os.replace(tmp, dest)
+        print(f"{slug}: {dest.stat().st_size} bytes -> {dest}")
+    return 0
+
+
 def fetch_assets(
     slug: str,
     root: str | None = None,
@@ -52,13 +76,22 @@ def fetch_assets(
     dl = default_download if download is None else download
     meta = yaml.safe_load(meta_yml(slug, root).read_text(encoding="utf-8")) or {}
     pmcid = meta.get("pmcid")
-    if not pmcid:
-        print(f"{meta_yml(slug, root)}: no pmcid", file=sys.stderr)
-        return 2
+    arxiv = meta.get("arxiv")
     units = read_json(work_dir(slug, root) / "units.json", [])
     graphics = collect_graphics(units)
     if not graphics:
         return 0
+    if not pmcid and arxiv:
+        return _write_direct(
+            slug,
+            graphics,
+            root,
+            dl,
+            lambda name: urljoin(arxiv_html_url(str(arxiv)) + "/", name),
+        )
+    if not pmcid:
+        print(f"{meta_yml(slug, root)}: no pmcid", file=sys.stderr)
+        return 2
     out_dir = assets_dir(slug, root)
     out_dir.mkdir(parents=True, exist_ok=True)
     try:
@@ -70,7 +103,7 @@ def fetch_assets(
         picked = best.get(filename)
         dest = out_dir / filename
         if not picked:
-            if dest.exists() and is_image_bytes(dest.read_bytes()[:16]):
+            if dest.exists() and is_image_bytes(dest.read_bytes()):
                 continue
             print(f"{slug}: no CDN URL for {filename}", file=sys.stderr)
             return 1
@@ -78,11 +111,7 @@ def fetch_assets(
         if not is_image_bytes(data):
             print(f"{slug}: not an image: {filename} from {url}", file=sys.stderr)
             return 1
-        if (
-            dest.exists()
-            and dest.stat().st_size >= len(data)
-            and is_image_bytes(dest.read_bytes()[:16])
-        ):
+        if dest.exists() and dest.stat().st_size >= len(data) and is_image_bytes(dest.read_bytes()):
             continue
         tmp = dest.with_name(dest.name + ".tmp")
         tmp.write_bytes(data)

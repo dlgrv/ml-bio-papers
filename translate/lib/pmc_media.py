@@ -32,7 +32,12 @@ IMAGE_MAGIC = (
 
 
 def is_image_bytes(data: bytes) -> bool:
-    return any(data.startswith(magic) for magic, _ in IMAGE_MAGIC)
+    if any(data.startswith(magic) for magic, _ in IMAGE_MAGIC):
+        return True
+    head = data.lstrip()[:800].lower()
+    if b"<html" in head:
+        return False
+    return b"<svg" in head
 
 
 def normalize_pmcid(pmcid: str) -> str:

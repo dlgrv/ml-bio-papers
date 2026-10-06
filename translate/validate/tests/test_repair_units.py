@@ -110,3 +110,29 @@ def test_max_rounds_leaves_needs_repair(tmp_path):
     report = json.loads((wd / "repair_report.json").read_text(encoding="utf-8"))
     assert "u001" in report["leftover"]
     assert code == 1
+
+
+def test_paper_level_links_skip_units_with_matching_urls(tmp_path):
+    ok_src = "See [https://example.com/a](https://example.com/a)."
+    ok_ru = "См. [https://example.com/a](https://example.com/a)."
+    bad_src = (
+        "Board [https://gluebenchmark.com/leaderboard](https://gluebenchmark.com/leaderboard)."
+    )
+    bad_ru = (
+        "Доска [https://gluebenchmark.com/leaderboard,](https://gluebenchmark.com/leaderboard,)."
+    )
+    units = [_para("u001", ok_src), _para("u002", bad_src)]
+    results = {
+        "u001": {"status": "ok", "text": ok_ru},
+        "u002": {"status": "ok", "text": bad_ru},
+    }
+    root, wd = _layout(tmp_path, units, results)
+    llm = FakeLLM([])
+    code = ru.repair_units(SLUG, root=str(root), llm=llm)
+    assert llm.calls == []
+    out = json.loads((wd / "translated.json").read_text(encoding="utf-8"))
+    assert out["u001"]["text"] == ok_ru
+    assert out["u001"]["status"] == "ok"
+    assert "leaderboard," not in out["u002"]["text"]
+    assert "leaderboard" in out["u002"]["text"]
+    assert code == 0
