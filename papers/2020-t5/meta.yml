@@ -1,0 +1,21 @@
+title: "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer"
+authors:
+  - "Colin Raffel"
+  - "Noam Shazeer"
+  - "Adam Roberts"
+  - "Katherine Lee"
+  - "Sharan Narang"
+  - "Michael Matena"
+  - "Yanqi Zhou"
+  - "Wei Li"
+  - "Peter J. Liu"
+doi: "10.48550/arXiv.1910.10683"
+arxiv: "1910.10683"
+journal: "JMLR"
+year: 2020
+license: "CC BY 4.0"
+status: "machine-translated"
+zenodo-doi: ""
+
+topics:
+  - transformers
