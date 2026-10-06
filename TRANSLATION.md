@@ -51,6 +51,10 @@ Minimal attribution only (no PMC/`assets/` notes, no MT status):
 
 Every `papers/<slug>/meta.yml` must set `topics` from the allowlist in [`topics.yml`](topics.yml). Prefer a focused set (about four or fewer); more is allowed when genuinely needed. Add a new topic to `topics.yml` in the same PR that first uses it.
 
+## Difficulty
+
+Every `papers/<slug>/meta.yml` must set `difficulty` to an integer **1–10** (how hard the paper is to read for a typical ML student). Optional `difficulty_note` is a short Russian remark without the «Сложность N/10.» prefix — the site builds that string. Score by length, math/engineering density, and prerequisites (same spirit as the [DeepPavlov course list](https://github.com/deeppavlov/agentic-course-itmo/blob/main/papers.md)). `make lint` rejects missing or out-of-range values.
+
 ## Style
 
 - Readability over calque.

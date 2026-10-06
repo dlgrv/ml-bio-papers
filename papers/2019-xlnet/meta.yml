@@ -16,3 +16,6 @@ zenodo-doi: ""
 
 topics:
   - transformers
+
+difficulty: 10
+difficulty_note: "Для искушённых."

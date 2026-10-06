@@ -83,6 +83,30 @@ class Paper:
         raw = self.meta.get("topics") or []
         return [t for t in raw if isinstance(t, str) and t]
 
+    @property
+    def difficulty(self) -> int | None:
+        raw = self.meta.get("difficulty")
+        if isinstance(raw, bool) or not isinstance(raw, int):
+            return None
+        if not 1 <= raw <= 10:
+            return None
+        return raw
+
+    @property
+    def difficulty_note(self) -> str:
+        note = self.meta.get("difficulty_note") or ""
+        return note.strip() if isinstance(note, str) else ""
+
+
+def difficulty_label(n: int, note: str = "") -> str:
+    """Full Russian difficulty string for catalog and article meta."""
+    base = f"Сложность {n}/10."
+    return f"{base} {note}" if note else base
+
+
+def difficulty_html(n: int, note: str = "") -> str:
+    return f'<span class="difficulty-chip">{html.escape(difficulty_label(n, note))}</span>'
+
 
 def topics_suffix(topics: list[str]) -> str:
     """Inline topic chips for meta lines (empty if no topics)."""
@@ -90,6 +114,13 @@ def topics_suffix(topics: list[str]) -> str:
         return ""
     chips = META_SEP.join(f'<span class="topic-chip">{html.escape(t)}</span>' for t in topics)
     return f"{META_SEP}{chips}"
+
+
+def difficulty_suffix(n: int | None, note: str = "") -> str:
+    """Inline difficulty text for meta lines (empty if unset)."""
+    if n is None:
+        return ""
+    return f"{META_SEP}{difficulty_html(n, note)}"
 
 
 def load_papers(root: Path) -> list[Paper]:
@@ -309,7 +340,7 @@ def render_index(papers: list[Paper]) -> str:
         f"""
           <li data-slug="{html.escape(p.slug)}">
             <a class="paper-link" href="{p.slug}/">{html.escape(p.title_ru)}</a>
-            <div class="blog-index__meta">{html.escape(p.authors)}{META_SEP}{html.escape(str(p.meta.get("journal", "")))}, {p.meta.get("year", "")}{topics_suffix(p.topics)}</div>
+            <div class="blog-index__meta">{html.escape(p.authors)}{META_SEP}{html.escape(str(p.meta.get("journal", "")))}, {p.meta.get("year", "")}{topics_suffix(p.topics)}{difficulty_suffix(p.difficulty, p.difficulty_note)}</div>
             <p class="blog-index__excerpt">{html.escape(p.meta["title"])}</p>
           </li>"""
         for p in papers
@@ -348,6 +379,8 @@ def render_article(p: Paper) -> str:
         info.append(
             META_SEP.join(f'<span class="topic-chip">{html.escape(t)}</span>' for t in p.topics)
         )
+    if p.difficulty is not None:
+        info.append(difficulty_html(p.difficulty, p.difficulty_note))
     meta_line = (
         "".join(f"<span>{x}</span>" for x in info)
         + f'<span class="meta-links">{sep.join(links)}</span>'
@@ -370,6 +403,7 @@ def search_index(papers: list[Paper]) -> list[dict]:
             "authors": p.authors,
             "year": p.meta.get("year", ""),
             "topics": p.topics,
+            "difficulty": p.difficulty,
         }
         for p in papers
     ]

@@ -24,3 +24,6 @@ zenodo-doi: ""
 
 topics:
   - metagenomics
+
+difficulty: 5
+difficulty_note: "Сравнительный кейс, мало новой теории."

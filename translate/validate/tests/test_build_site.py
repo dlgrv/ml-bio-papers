@@ -13,6 +13,8 @@ META = {
     "year": 2019,
     "status": "machine-translated",
     "topics": ["metagenomics"],
+    "difficulty": 8,
+    "difficulty_note": "Статья понятная, но большая.",
 }
 
 
@@ -81,11 +83,14 @@ def test_index_lists_paper_with_relative_link(tmp_path):
     # Topics sit inside the meta line with authors/journal.
     meta_start = idx.index('class="blog-index__meta"')
     excerpt_start = idx.index('class="blog-index__excerpt"', meta_start)
-    assert 'class="topic-chip">metagenomics</span>' in idx[meta_start:excerpt_start]
+    meta = idx[meta_start:excerpt_start]
+    assert 'class="topic-chip">metagenomics</span>' in meta
+    assert 'class="difficulty-chip">Сложность 8/10. Статья понятная, но большая.</span>' in meta
     search = (tmp_path / "out" / "static" / "search.json").read_text(encoding="utf-8")
     assert "2019-a" in search
     assert '"topics"' in search
     assert "metagenomics" in search
+    assert '"difficulty": 8' in search
     assert (tmp_path / "out" / "static" / "site.js").read_text(encoding="utf-8") == "// stub\n"
 
 
@@ -112,7 +117,10 @@ def test_article_page_uses_paper_layout(tmp_path):
     assert 'class="topic-chip">metagenomics</span>' in page
     addr_start = page.index("<address>")
     addr_end = page.index("</address>", addr_start)
-    assert 'class="topic-chip">metagenomics</span>' in page[addr_start:addr_end]
+    addr = page[addr_start:addr_end]
+    assert 'class="topic-chip">metagenomics</span>' in addr
+    assert 'class="difficulty-chip">Сложность 8/10. Статья понятная, но большая.</span>' in addr
+    assert addr.count("Сложность 8/10") == 1
     assert (out / "2019-a" / "index.pdf").read_bytes() == b"%PDF"
 
 

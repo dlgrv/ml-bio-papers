@@ -693,6 +693,13 @@ html {
   opacity: 0.55;
 }
 
+.difficulty-chip {
+  font-size: inherit;
+  color: inherit;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
 .blog-agent-notes {
   margin-top: 2.5em;
   padding-top: 1em;
@@ -1012,7 +1019,8 @@ html.dark .blog-index__meta {
 html.dark .blog-index__excerpt {
   color: var(--text);
 }
-html.dark .topic-chip {
+html.dark .topic-chip,
+html.dark .difficulty-chip {
   color: var(--mut);
 }
 html.dark .blog-index li {

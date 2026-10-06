@@ -12,3 +12,6 @@ zenodo-doi: ""
 
 topics:
   - metagenomics
+
+difficulty: 7
+difficulty_note: "Надстройка над Kraken 2, нужны LCA и long reads."
