@@ -55,6 +55,10 @@ Every `papers/<slug>/meta.yml` must set `topics` from the allowlist in [`topics.
 
 Every `papers/<slug>/meta.yml` must set `difficulty` to an integer **1–10** (how hard the paper is to read for a typical ML student). Optional `difficulty_note` is a short Russian remark without the «Сложность N/10.» prefix — the site builds that string. Score by length, math/engineering density, and prerequisites (same spirit as the [DeepPavlov course list](https://github.com/deeppavlov/agentic-course-itmo/blob/main/papers.md)). `make lint` rejects missing or out-of-range values.
 
+## Titles
+
+Published `papers/<slug>/index.md` must start with one level-1 `# …` title (the paper name), not `## Аннотация` / Abstract. Do not leave markdown bold/code wrappers (`**…**`, `` `…` ``) in that line — the site shows titles as plain text. `make lint` rejects missing or section-like H1s.
+
 ## Style
 
 - Readability over calque.

@@ -79,6 +79,27 @@ def test_section_xref_unmasks_placeholders_in_heading():
     assert "Методы BERT" in md
 
 
+def test_paper_title_strips_bold_and_code_markup():
+    us = [
+        {
+            "id": "u001",
+            "kind": "title",
+            "level": 1,
+            "translate": True,
+            "text": "title",
+            "spans": {},
+            "src_id": "",
+            "label": "",
+            "graphics": [],
+            "source_md": "title",
+        }
+    ]
+    md = rm.render(us, {"u001": "**BERT**: `YACHT` name"}, original=False)
+    assert md.startswith("# BERT: YACHT name\n")
+    assert "**" not in md.split("\n", 1)[0]
+    assert "`" not in md.split("\n", 1)[0]
+
+
 def test_references_are_copied_verbatim_in_both_modes():
     us = units()
     refs = [u["source_md"] for u in us if u["kind"] == "ref"]
