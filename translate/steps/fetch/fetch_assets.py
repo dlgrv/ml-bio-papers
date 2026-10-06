@@ -90,7 +90,15 @@ def fetch_assets(
             lambda name: urljoin(arxiv_html_url(str(arxiv)) + "/", name),
         )
     if not pmcid:
-        print(f"{meta_yml(slug, root)}: no pmcid", file=sys.stderr)
+        # PDF fetch pre-writes assets/; accept if every graphic is already on disk.
+        out_dir = assets_dir(slug, root)
+        missing = [g for g in graphics if not (out_dir / g).is_file()]
+        if not missing:
+            return 0
+        print(
+            f"{meta_yml(slug, root)}: no pmcid (missing assets: {', '.join(missing)})",
+            file=sys.stderr,
+        )
         return 2
     out_dir = assets_dir(slug, root)
     out_dir.mkdir(parents=True, exist_ok=True)

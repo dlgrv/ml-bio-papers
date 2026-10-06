@@ -17,7 +17,7 @@ Steps: `fetch → digest → assets → translate → render → verify → repa
 
 Details: [translate/README.md](translate/README.md).
 
-1. Fetch JATS from PMC (`meta.yml` → `pmcid`).
+1. Fetch JATS from PMC (`meta.yml` → `pmcid`), arXiv HTML (`arxiv`), or HTTPS PDF (`pdf`).
 2. Digest into units; download figure binaries into `papers/<slug>/assets/`.
 3. MT translation (glossary from `glossary/` is mandatory).
 4. Scripted verification (structure, numbers, DOI/URLs in document order, citations, figures, glossary).
