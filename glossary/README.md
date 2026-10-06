@@ -32,6 +32,12 @@
 | ensemble | ансамбль | |
 | stacking | стекинг | |
 | hypothesis testing | проверка статистических гипотез | |
+| pre-training | предобучение | |
+| fine-tuning | дообучение | |
+| self-attention | самовнимание | |
+| downstream task | прикладная задача | |
+| masked language modeling (MLM) | маскированное языковое моделирование | при первом употреблении — MLM |
+| next sentence prediction (NSP) | предсказание следующего предложения | при первом употреблении — NSP |
 | average nucleotide identity (ANI) | средняя нуклеотидная идентичность (ANI) | |
 | long reads | длинные риды | |
 | assembly | сборка (генома) | |
