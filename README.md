@@ -53,10 +53,10 @@ ml-papers/
 └── papers/                 # one folder per paper
     └── YYYY-name/
         ├── index.md        # translation / summary = future site page
-        └── meta.yml        # DOI, authors, journal, license, status, topics, Zenodo DOI
+        └── meta.yml        # DOI, authors, journal, license, status, topics, difficulty, Zenodo DOI
 ```
 
-`meta.yml` must include a non-empty `topics` list. Every entry must appear in [`topics.yml`](topics.yml) (any count from the allowlist). `make lint` rejects unknown or missing topics.
+`meta.yml` must include a non-empty `topics` list. Every entry must appear in [`topics.yml`](topics.yml) (any count from the allowlist). It must also set `difficulty` (integer 1–10) and may set `difficulty_note` (short Russian remark). `make lint` rejects unknown or missing topics and invalid difficulty.
 
 ## License
 

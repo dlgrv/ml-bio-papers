@@ -14,3 +14,6 @@ zenodo-doi: ""
 
 topics:
   - transformers
+
+difficulty: 8
+difficulty_note: "Статья понятная, но большая."

@@ -14,3 +14,6 @@ zenodo-doi: ""
 
 topics:
   - metagenomics
+
+difficulty: 7
+difficulty_note: "Статистический тест: ANI и проверка гипотез."

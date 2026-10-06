@@ -36,3 +36,6 @@ zenodo-doi: ""
 
 topics:
   - metagenomics
+
+difficulty: 8
+difficulty_note: "Большая methods-статья, много каталогов и бенчмарков."

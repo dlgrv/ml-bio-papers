@@ -19,3 +19,6 @@ zenodo-doi: ""
 
 topics:
   - transformers
+
+difficulty: 9
+difficulty_note: "Нереально большая статья."

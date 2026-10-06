@@ -21,6 +21,7 @@ lint:  ## All linters (must match CI and pre-commit)
 	$(RUFF) check translate
 	$(PY) -m yamllint .github/workflows/ papers/*/meta.yml topics.yml
 	$(PY) -m translate.ops.validate_topics
+	$(PY) -m translate.ops.validate_difficulty
 	shellcheck translate/steps/translate/*.sh
 
 ci:  ## Local gate ≈ pre-push / GitHub (lint + test)

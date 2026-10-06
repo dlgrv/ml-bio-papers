@@ -10,3 +10,6 @@ zenodo-doi: ""
 
 topics:
   - metagenomics
+
+difficulty: 6
+difficulty_note: "Инженерная methods-статья, без тяжёлой теории."
