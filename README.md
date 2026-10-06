@@ -2,7 +2,7 @@
 
 # ml-papers
 
-Unofficial translations and structured summaries of scientific ML papers — metagenomics, NLP, agents, and related areas.
+Unofficial translations and structured summaries of scientific ML papers — metagenomics, transformers/NLP, and related areas.
 
 Every translation states its original source (DOI), the license it is made under, and its review status: machine translation, machine translation + LLM review, or human-verified.
 
@@ -27,6 +27,7 @@ Every translation states its original source (DOI), the license it is made under
 
 | Year | Paper | Journal | Original (DOI) | Full text | License | Status |
 | --- | --- | --- | --- | --- | --- | --- |
+| 2018 | GPT-1 | OpenAI | — | [PDF](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) | All rights reserved (see original PDF) | machine-translated |
 | 2019 | BERT | NAACL-HLT | [10.18653/v1/N19-1423](https://doi.org/10.18653/v1/N19-1423) | [arXiv](https://arxiv.org/abs/1810.04805) | CC BY 4.0 | machine-translated |
 | 2019 | Kraken 2 | Genome Biology | [10.1186/s13059-019-1891-0](https://doi.org/10.1186/s13059-019-1891-0) | [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC6883579/) | CC BY 4.0 | machine-translated |
 | 2019 | XLNet | NeurIPS | [10.48550/arXiv.1906.08237](https://doi.org/10.48550/arXiv.1906.08237) | [arXiv](https://arxiv.org/abs/1906.08237) | arXiv perpetual non-exclusive | machine-translated |
