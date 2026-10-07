@@ -233,7 +233,6 @@ html.nav-hidden .nav {
 
 .icon-btn:hover,
 .icon-btn:focus-visible {
-  background: var(--code-bg);
   color: var(--ink);
 }
 
